@@ -1,0 +1,58 @@
+$primaryColor: #d680c47d;
+$retreat: 10px;
+$radius: 10px;
+
+body {
+  color: black;
+  background-image: url('../../fon.jpg');
+}
+
+.wrapper {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1170px;
+}
+.header {
+  position: relative;
+
+  button {
+    margin-top: 0px;
+    position: absolute;
+    float: left;
+    left: $retreat;
+  }
+  /* :nth-child(2) {
+    padding-top: 50px;
+  }*/
+}
+
+button {
+  background-color: $primaryColor;
+  color: black;
+  border-radius: $radius;
+  width: 150px;
+  height: 40px;
+}
+
+.lists {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+ul {
+  text-align: left;
+  color: green;
+}
+
+.listButton {
+  margin-top: 20px;
+}
+
+.title {
+  p,
+  input {
+    margin: 16px auto;
+    //align-items: center;
+  }
+}

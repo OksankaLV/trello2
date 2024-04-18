@@ -1,0 +1,21 @@
+.formBoard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  button {
+    padding: 0px;
+    margin: 0px;
+  }
+}
+
+.noneBoard {
+  display: none;
+}
+
+.newBoard {
+  height: 40%;
+  width: 33%;
+  position: absolute;
+  left: 180px;
+  background-color: rgb(235 208 235);
+}

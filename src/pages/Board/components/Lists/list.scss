@@ -1,0 +1,60 @@
+@use '../../board.scss';
+
+$primaryColor: #3d2574; //#27ae60;
+$retreat: 10px;
+$radius: 15px;
+@mixin backraund($color) {
+  background: linear-gradient(150deg, $primaryColor, $color 50%);
+}
+
+.list {
+  color: #04024e;
+  border: 2px solid;
+  border-radius: $radius;
+  border-color: $primaryColor;
+  text-align: center;
+  margin: $retreat;
+  padding-right: $retreat;
+  padding-left: $retreat;
+  padding-bottom: $retreat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  @include backraund(#27ae6030);
+  max-height: 200px;
+
+  button {
+    height: 30px;
+    width: 80px;
+    margin: 5px;
+  }
+}
+.titleList {
+  margin: 5px auto;
+}
+.listItems {
+  text-align: left;
+  margin: $retreat;
+  overflow-y: auto; //scroll - allways
+  scroll-behavior: smooth;
+  height: 150px;
+  div {
+    border: 1px $primaryColor solid;
+    border-radius: $radius;
+    margin: 2px;
+    padding: 5px;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  span {
+    cursor: pointer;
+  }
+}
+
+.buttonsList {
+  display: flex;
+}

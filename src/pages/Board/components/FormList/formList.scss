@@ -1,0 +1,17 @@
+.formList {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  align-items: center;
+  width: min-content;
+
+  button {
+    padding: 0px;
+    margin: 0px;
+  }
+}
+
+.noneList {
+  display: none;
+}
