@@ -31,7 +31,7 @@ export const FormCard = ({ active, setActive, board_id, list_id, id }: IForm):JS
     }
   }
 
-  const [titleCard, setTitleList] = useState('Введіть назву картки!');
+  const [titleCard, setTitleList] = useState('');
 
   return (
     <form name="newCard" className={active ? 'newList' : 'noneList'}>
@@ -41,6 +41,7 @@ export const FormCard = ({ active, setActive, board_id, list_id, id }: IForm):JS
           id={list_id?.toString()}
           name={list_id?.toString()}
           type="text"
+          placeholder='Введіть назву картки'
           value={titleCard}
           autoFocus={true}
           onChange={(event) => setTitleList(event?.target.value)}

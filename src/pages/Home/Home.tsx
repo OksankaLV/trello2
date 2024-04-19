@@ -29,8 +29,12 @@ export function Home() : JSX.Element {
 
   useEffect(() => {
     setProgressValue(0);
-    if (error) {
-      toast.warn(error, {
+    getBoards(setProgressValue)
+      .then((data) => {
+        setBoardData(data);
+      })
+      .catch((error) => {
+        toast.warn(error.response.data.error, {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
@@ -38,15 +42,8 @@ export function Home() : JSX.Element {
         transition: Bounce,
         closeOnClick: true,
       });
-    }
-    getBoards(setProgressValue)
-      .then((data) => {
-        setBoardData(data);
-      })
-      .catch((error) => {
-        setError(error.response.data.error);
       });
-  }, []);
+  },[]);
 
   return (
     <section className="wrapper">

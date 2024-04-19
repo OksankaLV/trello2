@@ -8,12 +8,13 @@ const header = { Authorization: `Bearer ${token}` };
 
 let progressValue = 0;
 
+
 export function req(setProgressValue: Dispatch<SetStateAction<number>>, setError: Dispatch<SetStateAction<string>>) {
   let progress: any;
   axios.interceptors.request.use(
     function (option) {
       setProgressValue(progressValue);
-      progressValue<95? progressValue = progressValue+5: progressValue=progressValue-5;
+      (progressValue<95) ? progressValue = progressValue+5: progressValue=progressValue-5;
       progress = setInterval(() => setProgressValue(progressValue), 100);
       console.log('req');
       return option;
@@ -58,6 +59,7 @@ export function req(setProgressValue: Dispatch<SetStateAction<number>>, setError
 }
 
 export const getBoards = async (setProgressValue: Dispatch<SetStateAction<number>>) => {
+  console.log(`${api.baseURL}`);
   const { data } = await axios.get(`${api.baseURL}/board`, {
     headers: header,
     onDownloadProgress: () => {
@@ -78,6 +80,7 @@ export const postBoard = async (value: string, custom?: object) => {
       headers: header,
     }
   );
+  console.log(data)
   return data;
 };
 

@@ -2,6 +2,8 @@ import './formBoard.scss';
 import React, { useState } from 'react';
 import { postBoard } from '../../../../utils/allRequests';
 import { validation } from '../../../../utils/validationText';
+import { error } from 'console';
+import { toast } from 'react-toastify';
 
 interface IForm {
   active: boolean;
@@ -19,13 +21,13 @@ function addBoard(titleBoard: string, custom: object) {
 }
 
 export const FormBoard = ({ active, setActive }: IForm): JSX.Element => {
-  const [titleBoard, setTitleBoard] = useState('Введіть назву дошки');
-  const [colorBoard, setColorBoard] = useState('blue');
+  const [titleBoard, setTitleBoard] = useState('');
+  const [colorBoard, setColorBoard] = useState('');
 
   return (
     <form className={active ? 'newBoard' : 'noneBoard'}>
       <div className="formBoard">
-        <input type="text" value={titleBoard} onChange={(event) => setTitleBoard(event?.target.value)} />
+        <input type="text" placeholder={'Введіть назву дошки'} value={titleBoard} onChange={(event) => setTitleBoard(event?.target.value)} />
         <input type="color" value={colorBoard} onChange={(event) => setColorBoard(event?.target.value)} />
         <button
           type="submit"

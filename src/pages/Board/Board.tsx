@@ -30,7 +30,7 @@ export const Board = function () {
         setLists(data.lists);
         setTitle(data.title);
       })
-      .catch((error) => setError(error.response.data.error));
+      .catch((error) => toast.warn(error.response.data.error));
   }, [error]); //// ПОКИ ПІД ПИТАННЯМ*/
 
   req(setProgressValue, setError);
