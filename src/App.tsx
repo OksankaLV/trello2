@@ -3,14 +3,15 @@ import { Home } from './pages/Home/Home';
 import { Board } from './pages/Board/Board';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import React from 'react';
+import { ToastContainer } from 'react-toastify';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/trello2/',
     element: <Home />,
   },
   {
-    path: '/board/:board_id',
+    path: '/trello2/board/:board_id',
     element: <Board />,
   },
 ]);
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
 function App() : JSX.Element{
   return (
     <div>
+      <ToastContainer position="top-center" autoClose={5000} rtl={false} />
       <RouterProvider router={router} />
     </div>
   );

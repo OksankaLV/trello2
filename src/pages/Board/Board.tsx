@@ -57,7 +57,7 @@ export const Board = function () {
       <ToastContainer />
       {progressValue < 100 ? <ProgressBar value={progressValue} max={100} /> : <></>}
       <div className="header">
-        <Link to={`/`}>
+        <Link to={`/trello2/`}>
           <Button name={'На головну сторінку'} />
         </Link>
         <div className="title">
@@ -86,7 +86,7 @@ function AddFormList({ board_id }: IFormList) {
         {' '}
         Додати новий список{' '}
       </button>
-      <Link to="/">
+      <Link to="/trello2/">
         <button
           onClick={() => {
             deleteBoard(board_id);
