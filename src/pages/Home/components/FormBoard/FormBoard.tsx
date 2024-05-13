@@ -1,8 +1,7 @@
 import './formBoard.scss';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { postBoard } from '../../../../utils/allRequests';
 import { validation } from '../../../../utils/validationText';
-import { error } from 'console';
 import { toast } from 'react-toastify';
 
 interface IForm {
@@ -10,9 +9,12 @@ interface IForm {
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+
 function addBoard(titleBoard: string, custom: object) {
   if (validation(titleBoard)) {
-    postBoard(titleBoard, custom).then((req) => alert(`Дошку з ID = ${req.id} успішно дадано`));
+    postBoard(titleBoard, custom)
+    .then((req) => alert(`Дошку з ID = ${req.id} успішно дадано`))
+    .catch((error)=>alert(error));
   } else {
     alert(
       "ім'я дошки не повинно бути порожнім, у ньому можна використовувати цифри, літери (а, А), пробіли, тире, крапки, нижні підкреслення"
@@ -32,7 +34,7 @@ export const FormBoard = ({ active, setActive }: IForm): JSX.Element => {
         <button
           type="submit"
           onClick={() => {
-            addBoard(titleBoard, { background: colorBoard });
+            addBoard(titleBoard, { background: colorBoard }); setActive(false)
           }}
         >
           Зберегти дошку

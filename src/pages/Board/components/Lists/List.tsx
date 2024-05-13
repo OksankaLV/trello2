@@ -3,23 +3,22 @@ import { Card } from '../Card/Card';
 import { Button } from '../Button';
 import './list.scss';
 import IList from '../../../../common/interfaces/IList';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FormCard } from '../FormCard/FormCard';
 import { useParams } from 'react-router-dom';
-import { deleteCard, deleteList, getBoard, putList } from '../../../../utils/allRequests';
-import { ReplaceTitle } from '../ReplaceTitle/ReplaceTitle';
+import { deleteCard, deleteList, getBoard, putLists } from '../../../../utils/allRequests';
+import { ReplaceTitleList } from '../ReplaceTitleList/ReplaceTitleList';
 
-export function List({ setLists, titleList, cards, list_id }: IList): JSX.Element {
+
+export function List({ setLists, titleList, cards, list_id, position }: IList): JSX.Element {
   const { board_id } = useParams();
   const [activeCard, setActiveCard] = useState(false);
-  const [title, setTitle] = useState(titleList);
+  const [viewCard, setViewCard] = useState(true)
 
   function addCard() {
     setActiveCard(!activeCard);
   }
-
-  //useEffect(() => {}, []); // cards, activeCard
-
+  
   function delCard(el: ICard) {
     deleteCard(board_id, el.id)
       .then(() => getBoard(board_id))
@@ -33,9 +32,14 @@ export function List({ setLists, titleList, cards, list_id }: IList): JSX.Elemen
       .then(() => alert(`${list_id}} element deleted`));
   }
 
+  function putCard(el:ICard){
+    setViewCard(false)
+  }
+
   const cardsItem = cards.map((el) => (
     <div key={el.id}>
-      <Card key={el.id} id={el.id} title={el.title} />
+      <Card key={el.id} id={el.id} title={el.title} view={viewCard}/>
+      <span onClick={() => putCard(el)}> 🖊️ </span> 
       <span onClick={() => delCard(el)}> ❌ </span>
     </div>
   ));
@@ -44,19 +48,17 @@ export function List({ setLists, titleList, cards, list_id }: IList): JSX.Elemen
   return (
     <div className="list">
       <h2 className="titleList">
-        {' '}
-        {/*title*/}
-        <ReplaceTitle board_id={board_id} title={title} setTitle={setTitle} id={list_id} nameRequest={putList} />
+        <ReplaceTitleList board_id={board_id} titleList={titleList} list_id={list_id} position={position} setLists={setLists} />
       </h2>
       <div className="listItems">{cardsItem} </div>
-      <FormCard active={activeCard} setActive={setActiveCard} board_id={board_id} list_id={list_id} id={card_id} />
+      <FormCard active={activeCard} setActive={setActiveCard} board_id={board_id} list_id={list_id} id={card_id} setLists={setLists}/>
       {!activeCard ? (
         <div className="buttonsList">
           <div onClick={addCard}>
-            <Button name={'Add card'} />
+            <Button name={'Додати картку'} />
           </div>
           <div onClick={delList}>
-            <Button name={'❌ list'} />
+            <Button name={'❌'} />
           </div>
         </div>
       ) : (

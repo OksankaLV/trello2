@@ -1,17 +1,11 @@
-@use '../../board.scss';
+@import '../../../../utils/constants.scss';
 
-$primaryColor: #3d2574; //#27ae60;
-$retreat: 10px;
-$radius: 15px;
-@mixin backraund($color) {
-  background: linear-gradient(150deg, $primaryColor, $color 50%);
-}
 
 .list {
   color: #04024e;
   border: 2px solid;
   border-radius: $radius;
-  border-color: $primaryColor;
+  border-color: $secondaryColor;
   text-align: center;
   margin: $retreat;
   padding-right: $retreat;
@@ -25,7 +19,7 @@ $radius: 15px;
   max-height: 200px;
 
   button {
-    height: 30px;
+  
     width: 80px;
     margin: 5px;
   }
@@ -40,7 +34,7 @@ $radius: 15px;
   scroll-behavior: smooth;
   height: 150px;
   div {
-    border: 1px $primaryColor solid;
+    border: 1px $secondaryColor solid;
     border-radius: $radius;
     margin: 2px;
     padding: 5px;

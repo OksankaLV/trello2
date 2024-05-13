@@ -1,7 +1,8 @@
 import axios from 'axios';
 import api from '../common/constants/api';
 import { Dispatch, SetStateAction } from 'react';
-import { Bounce, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
+import { title } from 'process';
 
 const token = 123;
 const header = { Authorization: `Bearer ${token}` };
@@ -16,50 +17,29 @@ export function req(setProgressValue: Dispatch<SetStateAction<number>>, setError
       setProgressValue(progressValue);
       (progressValue<95) ? progressValue = progressValue+5: progressValue=progressValue-5;
       progress = setInterval(() => setProgressValue(progressValue), 100);
-      console.log('req');
       return option;
     },
     function (error) {
-      console.log(error);
-     // setError(error);
-      toast.warn(error, {
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-        transition: Bounce,
-        closeOnClick: true,
-      });
+      toast.warn(error);
       return Promise.reject(error);
     }
   );
 
   axios.interceptors.response.use(
     function (option) {
-      console.log('response');
       clearInterval(progress);
       progressValue=90;
       setProgressValue((progressValue = progressValue + 10));
       return option;
     },
     function (error) {
-      console.log(error);
-      //setError(error);
-      toast.warn(error, {
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-        transition: Bounce,
-        closeOnClick: true,
-      });
+      toast.warn(error);
       return Promise.reject(error);
     }
   );
 }
 
 export const getBoards = async (setProgressValue: Dispatch<SetStateAction<number>>) => {
-  console.log(`${api.baseURL}`);
   const { data } = await axios.get(`${api.baseURL}/board`, {
     headers: header,
     onDownloadProgress: () => {
@@ -80,7 +60,6 @@ export const postBoard = async (value: string, custom?: object) => {
       headers: header,
     }
   );
-  console.log(data)
   return data;
 };
 
@@ -112,6 +91,7 @@ export const deleteBoard = async (board_id: string | undefined) => {
 };
 
 export const postList = async (board_id: string | undefined, title: string, position?: number) => {
+  console.log(title, position)
   const { data } = await axios.post(
     `${api.baseURL}/board/${board_id}/list`,
     {
@@ -125,12 +105,13 @@ export const postList = async (board_id: string | undefined, title: string, posi
   return data;
 };
 
-export const putLists = async (board_id: string | undefined, id: number, position: number) => {
+export const putLists = async (board_id: string | undefined, title: string, id: number,  position: number) => {
   const { data } = await axios.put(
     `${api.baseURL}/board/${board_id}/list`,
     [
       {
         id: id,
+        title: title,
         position: position,
       },
     ],
@@ -141,10 +122,13 @@ export const putLists = async (board_id: string | undefined, id: number, positio
   return data;
 };
 
-export const putList = async (board_id: string | undefined, id: number, position: number) => {
+export const putList = async (board_id: string | undefined, title: string, list_id: number, position: number) => {
+  console.log(`${api.baseURL}/board/${board_id}/list/${list_id}`)
   const { data } = await axios.put(
-    `${api.baseURL}/board/${board_id}/list/${id}`,
+    `${api.baseURL}/board/${board_id}/list/${list_id}`,
     {
+      id: list_id,
+      title: title,
       position: position,
     },
     {

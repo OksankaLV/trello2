@@ -6,12 +6,13 @@ import './formCard.scss';
 interface IForm {
   active: boolean;
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
+  setLists: React.Dispatch<any>;
   board_id?: string | undefined;
   list_id: number | undefined;
   id?: number | undefined;
 }
 
-export const FormCard = ({ active, setActive, board_id, list_id, id }: IForm):JSX.Element => {
+export const FormCard = ({ active, setActive, board_id, list_id, id, setLists }: IForm):JSX.Element => {
   function addCard(
     titleCard: string,
     board_id: string | undefined,
@@ -21,7 +22,7 @@ export const FormCard = ({ active, setActive, board_id, list_id, id }: IForm):JS
     if (validation(titleCard)) {
       postCard(titleCard, board_id, list_id, id)
         .then((req) => alert(`Картку з ID = ${req.id} успішно дадано`))
-        .then(() => getBoard(board_id))
+        .then(() => getBoard(board_id)).then((data)=>setLists(data.lists))
         .catch((error) => console.log(error));
       setActive(false);
     } else {

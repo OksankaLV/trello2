@@ -1,11 +1,11 @@
 import './App.css';
 import { Home } from './pages/Home/Home';
 import { Board } from './pages/Board/Board';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { HashRouter, Route, Router, RouterProvider, Routes, createBrowserRouter } from 'react-router-dom';
 import React from 'react';
 import { ToastContainer } from 'react-toastify';
 
-const router = createBrowserRouter([
+/*const router = createBrowserRouter([
   {
     path: '/trello2/',
     element: <Home />,
@@ -14,14 +14,21 @@ const router = createBrowserRouter([
     path: '/trello2/board/:board_id',
     element: <Board />,
   },
-]);
+]);*/
 
 function App() : JSX.Element{
-  return (
-    <div>
+  return (<>
+    <HashRouter>
+<Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/board/:board_id" element={<Board />} />
+</Routes>
+</HashRouter>
+</>
+    /*<div>
       <ToastContainer position="top-center" autoClose={5000} rtl={false} />
       <RouterProvider router={router} />
-    </div>
+    </div>*/
   );
 }
 

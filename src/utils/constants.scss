@@ -1,0 +1,8 @@
+$primaryColor: #d680c47d;
+$retreat: 10px;
+$radius: 10px;
+
+$secondaryColor: #3d2574; //#27ae60;
+@mixin backraund($color) {
+  background: linear-gradient(150deg, $secondaryColor, $color 50%);
+}

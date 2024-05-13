@@ -10,11 +10,6 @@ import { ReplaceTitle } from './components/ReplaceTitle/ReplaceTitle';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import { toast, Bounce, ToastContainer } from 'react-toastify';
 
-/*interface ITitle{
-  title: string,
-  input: boolean,
-  setInput: React.Dispatch<React.SetStateAction<boolean>>
-}*/
 
 export const Board = function () {
   const [title, setTitle] = useState(titleStart);
@@ -48,8 +43,8 @@ export const Board = function () {
     }
   }, [error]);
   document.title = title;
-  const listItems = lists.map((el) => (
-    <List setLists={setLists} key={el.id} list_id={el.id} titleList={el.title} cards={el.cards} />
+  const listItems = lists.map((el,index) => (
+    <List setLists={setLists} key={el.id} list_id={el.id} titleList={el.title} cards={el.cards} position={index}/>
   ));
 
   return (
@@ -57,7 +52,7 @@ export const Board = function () {
       <ToastContainer />
       {progressValue < 100 ? <ProgressBar value={progressValue} max={100} /> : <></>}
       <div className="header">
-        <Link to={`/trello2/`}>
+        <Link to={`/`}>
           <Button name={'На головну сторінку'} />
         </Link>
         <div className="title">
@@ -86,7 +81,7 @@ function AddFormList({ board_id }: IFormList) {
         {' '}
         Додати новий список{' '}
       </button>
-      <Link to="/trello2/">
+      <Link to="/">
         <button
           onClick={() => {
             deleteBoard(board_id);

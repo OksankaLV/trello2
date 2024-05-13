@@ -6,6 +6,7 @@ interface ICard {
   custom?: any;
   users?: ID[];
   created_at?: timestamp;
+  view: boolean;
 }
 
 export = ICard;

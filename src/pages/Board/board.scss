@@ -1,6 +1,8 @@
-$primaryColor: #d680c47d;
+@import '../../utils/constants.scss';
+
+/*$primaryColor: #d680c47d;
 $retreat: 10px;
-$radius: 10px;
+$radius: 10px;*/
 
 body {
   color: black;
@@ -37,7 +39,10 @@ button {
 
 .lists {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  
+  overflow-y: auto; 
+  scroll-behavior: smooth;
 }
 
 ul {

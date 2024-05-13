@@ -1,6 +1,6 @@
 {
-  "name": "trello-new",
-  "homepage": "https://oksankalv.github.io/trello2",
+  "name": "trello2",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

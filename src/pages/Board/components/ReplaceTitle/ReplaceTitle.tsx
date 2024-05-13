@@ -18,7 +18,7 @@ export function ReplaceTitle(props: ITitle): JSX.Element {
   const createTitle = function () {
     if (validation(props.title)) {
       props
-        .nameRequest(props.board_id, props.title)
+        .nameRequest(props.board_id, props.title, props.id, props.position)
         .then(() => getBoard(props.board_id))
         .then((data: any) => {
           setInput(false);
@@ -30,7 +30,7 @@ export function ReplaceTitle(props: ITitle): JSX.Element {
     }
   };
   return (
-    <p>
+    <div>
       {input ? (
         <input
           type="text"
@@ -46,6 +46,6 @@ export function ReplaceTitle(props: ITitle): JSX.Element {
       ) : (
         <p onClick={() => setInput(!input)}> {props.title}</p>
       )}
-    </p>
+    </div>
   );
 }
