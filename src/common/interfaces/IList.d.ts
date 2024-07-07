@@ -1,7 +1,7 @@
 interface IList {
   board_id?: string|undefined;
   setLists: React.Dispatch<React.SetStateAction<>>;
-  list_id: number;
+  id: number;
   titleList: string;
   //  setTitle: React.Dispatch<React.SetStateAction<>>;
   cards: ICard[];

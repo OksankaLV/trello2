@@ -1,10 +1,15 @@
 import ICard from '../../../../common/interfaces/ICard';
-import React from 'react';
-import { putCard } from '../../../../utils/allRequests';
-import { Value } from 'sass';
+import React, { useState } from 'react';
+import { getBoard, putCard } from '../../../../utils/allRequests';
 
-export function Card({ id, title, view}: ICard): JSX.Element {
+export function Card({setLists, id, title, view, board_id, list_id}: ICard): JSX.Element {
+  const [newTitle, setTitle] =useState(title)
   const idStr = id?.toString();
+
+function replaceCard(){
+  putCard(board_id, id, newTitle, list_id).then(()=>getBoard(board_id)).then((data)=>setLists(data.lists))
+}
+
   return (
     view? 
     <div id={idStr}> {title} </div>: 
@@ -12,12 +17,14 @@ export function Card({ id, title, view}: ICard): JSX.Element {
     <input
         type="text"
         placeholder={title}
+        value={newTitle}
+        onChange={(event) => setTitle(event?.target.value)}
         onKeyDown={(event) => {
           if (event?.key === 'Enter') {
-            alert(+"Зробити запит на зміну картки");
+            replaceCard();
           }
         }}
-        onBlur={() => alert("Зробити запит на зміну картки")}
+        onBlur={() => replaceCard()}
       ></input>
     </div>)
 }

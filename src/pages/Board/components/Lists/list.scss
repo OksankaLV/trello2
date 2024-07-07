@@ -16,12 +16,17 @@
   align-items: center;
   justify-content: space-between;
   @include backraund(#27ae6030);
-  max-height: 200px;
+
 
   button {
   
     width: 80px;
     margin: 5px;
+  }
+}
+.newList {
+  button {
+    width: 75px;
   }
 }
 .titleList {
@@ -33,21 +38,39 @@
   overflow-y: auto; //scroll - allways
   scroll-behavior: smooth;
   height: 150px;
+  min-width: 80px;
+  max-width: 180px;
   div {
-    border: 1px $secondaryColor solid;
+    /*border: 1px $secondaryColor solid;*/
     border-radius: $radius;
     margin: 2px;
-    padding: 5px;
+    padding: 2px;
     background-color: white;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+
+    div{
+      max-width: 66%;
+      white-space: pre-wrap;
+      overflow: hidden;
+    }
+   }
+   .noActive, .newActive {
+    background-color: gray;
+    height: 4ex;    
   }
+  
+  .drag{
+    opacity: 50%;
+  }
+
   span {
     cursor: pointer;
   }
 }
+
 
 .buttonsList {
   display: flex;

@@ -2,7 +2,6 @@ import axios from 'axios';
 import api from '../common/constants/api';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
-import { title } from 'process';
 
 const token = 123;
 const header = { Authorization: `Bearer ${token}` };
@@ -10,8 +9,8 @@ const header = { Authorization: `Bearer ${token}` };
 let progressValue = 0;
 
 
-export function req(setProgressValue: Dispatch<SetStateAction<number>>, setError: Dispatch<SetStateAction<string>>) {
-  let progress: any;
+export function req(setProgressValue: Dispatch<SetStateAction<number>>) {
+  let progress: NodeJS.Timer;
   axios.interceptors.request.use(
     function (option) {
       setProgressValue(progressValue);
@@ -67,7 +66,6 @@ export const getBoard = async (board_id: string | undefined) => {
   const { data } = await axios.get(`${api.baseURL}/board/${board_id}`, {
     headers: header,
     onDownloadProgress: () => {
-      console.log("getBoard")
       progressValue = 100;
     },
   });
@@ -169,10 +167,10 @@ export const postCard = async (
   return data;
 };
 
-export const putCards = async (board_id: string | undefined) => {
+export const putCards = async (board_id: string | undefined | number, id: number, position: number, list_id: number) => {
   const { data } = await axios.put(
     `${api.baseURL}/board/${board_id}/card`,
-    [{ id: Number, position: Number, list_id: Number }],
+    [{ id: id, position: position, list_id: list_id }],
     {
       headers: header,
     }
@@ -182,10 +180,11 @@ export const putCards = async (board_id: string | undefined) => {
 
 export const putCard = async (
   board_id: string | undefined,
-  id: number,
+  id: number | undefined,
   title: string,
-  description: string,
-  list_id: number
+  list_id: number,
+  description?: string,
+  
 ) => {
   const { data } = await axios.put(
     `${api.baseURL}/board/${board_id}/card/${id}`,

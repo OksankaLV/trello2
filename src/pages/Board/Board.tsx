@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
 import { titleStart, listsStart } from '../../utils/data/Lists';
 import { List } from './components/Lists/List';
 import { Button } from './components/Button';
@@ -19,6 +19,9 @@ export const Board = function () {
 
   const { board_id } = useParams();
 
+
+
+
   useEffect(() => {
     getBoard(board_id)
       .then((data) => {
@@ -26,9 +29,9 @@ export const Board = function () {
         setTitle(data.title);
       })
       .catch((error) => toast.warn(error.response.data.error));
-  }, [error]); //// ПОКИ ПІД ПИТАННЯМ*/
+  }, []); 
 
-  req(setProgressValue, setError);
+  req(setProgressValue);
 
   useEffect(() => {
     if (error) {
@@ -42,9 +45,10 @@ export const Board = function () {
       });
     }
   }, [error]);
+
   document.title = title;
   const listItems = lists.map((el,index) => (
-    <List setLists={setLists} key={el.id} list_id={el.id} titleList={el.title} cards={el.cards} position={index}/>
+    <List setLists={setLists} key={el.id} id={el.id} titleList={el.title} cards={el.cards} position={index}/>
   ));
 
   return (
@@ -61,19 +65,22 @@ export const Board = function () {
         <div>{board_id}</div>
       </div>
       <div className="lists">{listItems} </div>
-      <AddFormList board_id={board_id} />
+      <AddFormList board_id={board_id} position={listItems.length} setLists={setLists}/>
+      <button onClick={()=>newFunction()}>test</button>
     </div>
   );
 };
 
 interface IFormList {
   board_id: string | undefined;
+  position: number;
+  setLists: any;
 }
 
-function AddFormList({ board_id }: IFormList) {
+function AddFormList({ board_id, position, setLists}: IFormList) {
   const [newListActive, setNewListActive] = useState(false);
   if (newListActive) {
-    return <FormList active={newListActive} setActive={setNewListActive} id={board_id} />;
+    return <FormList active={newListActive} setActive={setNewListActive} id={board_id} position={position} setLists={setLists}/>;
   }
   return (
     <>
@@ -94,4 +101,9 @@ function AddFormList({ board_id }: IFormList) {
       </Link>
     </>
   );
+}
+
+function newFunction(){
+  alert('new')
+  
 }

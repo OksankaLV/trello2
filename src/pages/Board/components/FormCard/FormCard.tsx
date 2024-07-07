@@ -24,7 +24,6 @@ export const FormCard = ({ active, setActive, board_id, list_id, id, setLists }:
         .then((req) => alert(`Картку з ID = ${req.id} успішно дадано`))
         .then(() => getBoard(board_id)).then((data)=>setLists(data.lists))
         .catch((error) => console.log(error));
-      setActive(false);
     } else {
       alert(
         "ім'я не повинно бути порожнім, у ньому можна використовувати цифри, літери (а, А), пробіли, тире, крапки, нижні підкреслення"
@@ -48,9 +47,10 @@ export const FormCard = ({ active, setActive, board_id, list_id, id, setLists }:
           onChange={(event) => setTitleList(event?.target.value)}
         />
       </div>
-      <button type="submit" onClick={() => addCard(titleCard, board_id, list_id, id)}>
+      <button type="submit" onClick={() => {addCard(titleCard, board_id, list_id, id); setActive(false)}}>
         Зберегти
       </button>
+      <button onClick={(()=>{setActive(false)})}> Відмінити </button>
     </form>
   );
 };
