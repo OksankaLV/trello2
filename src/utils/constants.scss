@@ -6,3 +6,6 @@ $secondaryColor: #3d2574; //#27ae60;
 @mixin backraund($color) {
   background: linear-gradient(150deg, $secondaryColor, $color 50%);
 }
+
+$wrapperColor:  rgba(0,0,0,0.75);
+$backgroundColorModal: whitesmoke;

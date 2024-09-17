@@ -3,10 +3,14 @@
 /*$primaryColor: #d680c47d;
 $retreat: 10px;
 $radius: 10px;*/
-
+html, body{
+  height: 100%;
+}
 body {
   color: black;
-  background-image: url('../../fon.jpg');
+  // background-image: url('../../fon.jpg');
+  background: linear-gradient(to bottom right, blue, #d7dce5) no-repeat;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
 }
 
 .wrapper {

@@ -5,7 +5,7 @@
   button {
     padding: 0px;
     margin: 0px;
-  }
+    align-items: center;  }
 }
 
 .noneBoard {
@@ -13,9 +13,13 @@
 }
 
 .newBoard {
-  height: 40%;
   width: 33%;
   position: absolute;
   left: 180px;
   background-color: rgb(235 208 235);
+}
+span{
+  display: block;
+  text-align: right;
+  margin: 5px 0px;
 }

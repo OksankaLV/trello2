@@ -57,13 +57,19 @@
       overflow: hidden;
     }
    }
-   .noActive, .newActive {
+    .newActive {
     background-color: gray;
     height: 4ex;    
   }
-  
+  .noActive{
+    background-color: rgb(226, 86, 86);
+    height: 4ex;    
+
+  }
   .drag{
-    opacity: 50%;
+    
+    opacity: 80%;
+    rotate: -5deg;
   }
 
   span {

@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { getBoard } from '../../../../utils/allRequests';
 import { validation } from '../../../../utils/validationText';
 import './replaceTitle.scss';
+import { useAppDispatch } from '../../../../store/hooks';
+import { fetchBoard } from '../../../../store/ActionCreator';
 
 interface ITitle {
   board_id: string | undefined;
   title: string;
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  //setTitle: React.Dispatch<React.SetStateAction<string>>;
   //input: boolean;
   //setInput: React.Dispatch<React.SetStateAction<boolean>>;
   id?: number;
@@ -15,18 +17,24 @@ interface ITitle {
 }
 export function ReplaceTitle(props: ITitle): JSX.Element {
   const [input, setInput] = useState(false);
+  const [titleInput, setTitleInput] = useState('')
+
+  
+const dispatch = useAppDispatch();
+
   const createTitle = function () {
-    if (validation(props.title)) {
+    if (validation(titleInput)) {
       props
-        .nameRequest(props.board_id, props.title, props.id, props.position)
-        .then(() => getBoard(props.board_id))
-        .then((data: any) => {
-          setInput(false);
-          props.setTitle(data.title);
-        });
+        .nameRequest(props.board_id, titleInput, props.id, props.position)
+        .then(()=>dispatch(fetchBoard(props.board_id)))
+        // .then(() => getBoard(props.board_id))
+        // .then((data: any) => {
+           setInput(false);
+        //   setTitleInput(data.title);
+        // });
     } else {
-      props.setTitle(props.title);
-      setInput(true);
+      //setTitleInput(props.title);
+      setInput(false);
     }
   };
   return (
@@ -34,8 +42,9 @@ export function ReplaceTitle(props: ITitle): JSX.Element {
       {input ? (
         <input
           type="text"
-          value={props.title}
-          onChange={(event) => props.setTitle(event?.target.value)}
+          value={titleInput}
+          placeholder={props.title}
+          onChange={(event) => setTitleInput(event?.target.value)}
           onKeyDown={(event) => {
             if (event?.key === 'Enter') {
               createTitle();

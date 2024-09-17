@@ -30,7 +30,8 @@ export const FormBoard = ({ active, setActive }: IForm): JSX.Element => {
     <form className={active ? 'newBoard' : 'noneBoard'}>
       <div className="formBoard">
         <input type="text" placeholder={'Введіть назву дошки'} value={titleBoard} onChange={(event) => setTitleBoard(event?.target.value)} />
-        <input type="color" value={colorBoard} onChange={(event) => setColorBoard(event?.target.value)} />
+        <span>Оберіть колір дошки 
+        <input type="color" value={colorBoard} onChange={(event) => setColorBoard(event?.target.value)} /> </span>
         <button
           type="submit"
           onClick={() => {

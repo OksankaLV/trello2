@@ -1,20 +1,21 @@
-import axios from 'axios';
-import api from '../common/constants/api';
-import { Dispatch, SetStateAction } from 'react';
-import { toast } from 'react-toastify';
+import axios from "axios";
+import api from "../common/constants/api";
+import { Dispatch, SetStateAction } from "react";
+import { toast } from "react-toastify";
 
 const token = 123;
 const header = { Authorization: `Bearer ${token}` };
 
 let progressValue = 0;
 
-
 export function req(setProgressValue: Dispatch<SetStateAction<number>>) {
   let progress: NodeJS.Timer;
   axios.interceptors.request.use(
     function (option) {
       setProgressValue(progressValue);
-      (progressValue<95) ? progressValue = progressValue+5: progressValue=progressValue-5;
+      progressValue < 95
+        ? (progressValue = progressValue + 5)
+        : (progressValue = progressValue - 5);
       progress = setInterval(() => setProgressValue(progressValue), 100);
       return option;
     },
@@ -27,7 +28,7 @@ export function req(setProgressValue: Dispatch<SetStateAction<number>>) {
   axios.interceptors.response.use(
     function (option) {
       clearInterval(progress);
-      progressValue=90;
+      progressValue = 90;
       setProgressValue((progressValue = progressValue + 10));
       return option;
     },
@@ -38,7 +39,9 @@ export function req(setProgressValue: Dispatch<SetStateAction<number>>) {
   );
 }
 
-export const getBoards = async (setProgressValue: Dispatch<SetStateAction<number>>) => {
+export const getBoards = async (
+  setProgressValue: Dispatch<SetStateAction<number>>
+) => {
   const { data } = await axios.get(`${api.baseURL}/board`, {
     headers: header,
     onDownloadProgress: () => {
@@ -73,7 +76,11 @@ export const getBoard = async (board_id: string | undefined) => {
   return data;
 };
 
-export const putBoard = async (board_id: string | undefined, title: string, custom?: object) => {
+export const putBoard = async (
+  board_id: string | undefined,
+  title: string,
+  custom?: object
+) => {
   const { data } = await axios.put(
     `${api.baseURL}/board/${board_id}`,
     { title: title, custom: custom },
@@ -83,13 +90,19 @@ export const putBoard = async (board_id: string | undefined, title: string, cust
 };
 
 export const deleteBoard = async (board_id: string | undefined) => {
-  const { data } = await axios.delete(`${api.baseURL}/board/${board_id}`, { headers: header });
+  const { data } = await axios.delete(`${api.baseURL}/board/${board_id}`, {
+    headers: header,
+  });
 
   return data;
 };
 
-export const postList = async (board_id: string | undefined, title: string, position?: number) => {
-  console.log(title, position)
+export const postList = async (
+  board_id: string | undefined,
+  title: string,
+  position?: number
+) => {
+  console.log(title, position);
   const { data } = await axios.post(
     `${api.baseURL}/board/${board_id}/list`,
     {
@@ -103,7 +116,12 @@ export const postList = async (board_id: string | undefined, title: string, posi
   return data;
 };
 
-export const putLists = async (board_id: string | undefined, title: string, id: number,  position: number) => {
+export const putLists = async (
+  board_id: string | undefined,
+  title: string,
+  id: number,
+  position: number
+) => {
   const { data } = await axios.put(
     `${api.baseURL}/board/${board_id}/list`,
     [
@@ -120,8 +138,13 @@ export const putLists = async (board_id: string | undefined, title: string, id: 
   return data;
 };
 
-export const putList = async (board_id: string | undefined, title: string, list_id: number, position: number) => {
-  console.log(`${api.baseURL}/board/${board_id}/list/${list_id}`)
+export const putList = async (
+  board_id: string | undefined,
+  title: string,
+  list_id: number,
+  position: number
+) => {
+  console.log(`${api.baseURL}/board/${board_id}/list/${list_id}`);
   const { data } = await axios.put(
     `${api.baseURL}/board/${board_id}/list/${list_id}`,
     {
@@ -137,9 +160,12 @@ export const putList = async (board_id: string | undefined, title: string, list_
 };
 
 export const deleteList = async (board_id: string | undefined, id: number) => {
-  const { data } = await axios.delete(`${api.baseURL}/board/${board_id}/list/${id}`, {
-    headers: header,
-  });
+  const { data } = await axios.delete(
+    `${api.baseURL}/board/${board_id}/list/${id}`,
+    {
+      headers: header,
+    }
+  );
   return data;
 };
 
@@ -167,7 +193,12 @@ export const postCard = async (
   return data;
 };
 
-export const putCards = async (board_id: string | undefined | number, id: number, position: number, list_id: number) => {
+export const putCards = async (
+  board_id: string | undefined | number,
+  id: number,
+  position: number,
+  list_id: number
+) => {
   const { data } = await axios.put(
     `${api.baseURL}/board/${board_id}/card`,
     [{ id: id, position: position, list_id: list_id }],
@@ -183,8 +214,7 @@ export const putCard = async (
   id: number | undefined,
   title: string,
   list_id: number,
-  description?: string,
-  
+  description?: string
 ) => {
   const { data } = await axios.put(
     `${api.baseURL}/board/${board_id}/card/${id}`,
@@ -200,9 +230,15 @@ export const putCard = async (
   return data;
 };
 
-export const deleteCard = async (board_id: string | undefined, id: number | undefined) => {
-  const { data } = await axios.delete(`${api.baseURL}/board/${board_id}/card/${id}`, {
-    headers: header,
-  });
+export const deleteCard = async (
+  board_id: string | undefined,
+  id: number | string | undefined
+) => {
+  const { data } = await axios.delete(
+    `${api.baseURL}/board/${board_id}/card/${id}`,
+    {
+      headers: header,
+    }
+  );
   return data;
 };

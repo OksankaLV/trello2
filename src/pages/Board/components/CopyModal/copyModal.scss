@@ -1,0 +1,14 @@
+@import '../../../../utils/constants.scss';
+
+.copyCard{
+    display: flex;
+    flex-direction: column;
+    width: 20em;
+    height: 15em;
+    background-color: $backgroundColorModal;
+    border-radius: $radius;
+    align-items: center;
+    p{
+        margin: 2px;
+    }
+}

@@ -7,6 +7,9 @@ import { FormBoard } from './components/FormBoard/FormBoard';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/scss/main.scss';
+import { useAppDispatch } from '../../store/hooks';
+import { deActiveCard } from '../../store/listSlice';
+import { fetchBoard } from '../../store/ActionCreator';
 
 
 export function Home() : JSX.Element {
@@ -14,13 +17,16 @@ export function Home() : JSX.Element {
   const [newBoardActive, setNewBoardActive] = useState(false);
   const [progressValue, setProgressValue] = useState(0);
 
-  const list = boardData.map((el: { id: React.Key | null | undefined; title: string; custom: string;}) => (
-    <Link key={el.id} to={`board/${el.id}`}> 
+  const dispatch = useAppDispatch();
+
+  const list = boardData.map((el: { id: React.Key | null | undefined | string; title: string; custom: string;}) => (
+    <Link onClick={()=>{dispatch(fetchBoard(el.id))}} key={el.id} to={`board/${el.id}`}> 
       <Board key={el.id} title={el.title} custom={el.custom}></Board>
     </Link>
   ));
  
   useEffect(() => {
+    dispatch(deActiveCard());
     setProgressValue(0);
     getBoards(setProgressValue)
       .then((data) => {
@@ -41,6 +47,8 @@ export function Home() : JSX.Element {
       <div className="boardList">
         <div className="board" id="addBoard" onClick={() => setNewBoardActive(!newBoardActive)}>
           Додати дошку
+          <br></br>
+          +
         </div>
         {list}
       </div>

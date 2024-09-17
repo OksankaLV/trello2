@@ -17,8 +17,8 @@ export function ReplaceTitleList(props: ITitleList): JSX.Element {
   const [title, setTitle] = useState(props.titleList)
 
   const createTitle = function () {
-    if (validation(props.titleList)) {
-        putList(props.board_id, props.titleList, props.list_id, props.position)
+    if (validation(title)) {
+        putList(props.board_id, title, props.list_id, props.position)
         .then(()=>alert(`title updated`))
         .then(() => getBoard(props.board_id))
         .then((data)=>props.setLists(data.lists))
