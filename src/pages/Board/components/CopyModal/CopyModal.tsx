@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react"
 import './copyModal.scss'
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks"
-import { updateBoard } from "../../../../store/boardsSlice"
-import { axiosBoard, fetchBoard } from "../../../../store/ActionCreator"
+import { axiosBoard } from "../../../../store/ActionCreator"
 import IBoard from "../../../../common/interfaces/IBoard"
-import { deleteCard, getBoard, getBoards, postCard } from "../../../../utils/allRequests"
-import IList from "../../../../common/interfaces/IList"
+import { deleteCard, getBoard, postCard } from "../../../../utils/allRequests"
 import { useParams } from "react-router-dom"
+import IList from "../../../../common/interfaces/IList"
 
 interface IModal{
     titleCard: string,
     setAction: React.Dispatch<React.SetStateAction<{ copy: boolean, move: boolean }>>,
     typyAction: 'Move' | 'Copy'
-    description: ''
+    description: string | undefined
 }
 
 
@@ -44,25 +43,17 @@ export const CopyMoveModal = ({ titleCard, setAction, typyAction, description }:
 
 
     const OptionBoard = board.boards?.map((obj: IBoard) => <option key={obj.title} value={obj.id}>{obj.title}</option>)
-    const OptionList = lists.lists?.map((obj: any) => <option key={obj.id} value={obj.id} >{obj.title}</option>)
+    const OptionList = lists.lists?.map((obj: IList) => <option key={obj.id} value={obj.id} >{obj.title}</option>)
    
     
     function handleClick(typyAction: string): void {
         if (typyAction == 'Copy') {
             postCard(title, boardIdAction, +listAction, +position, description).then(()=>setAction({copy:false, move:false}))
-            console.log(listAction)
-            console.log(boardIdAction)
-            console.log(position)
         } else {
-             console.log(listAction)
-            console.log(boardIdAction)
-            console.log(position)
-            console.log('move')
             postCard(title, boardIdAction, +listAction, +position, description)
                 .then(() => deleteCard(board_id, card_id))
                 .then(() => setAction({ copy: false, move: false }))
-            console.log(listAction)
-            console.log(boardIdAction)
+            
         }
     }
 

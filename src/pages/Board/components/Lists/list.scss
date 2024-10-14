@@ -51,24 +51,28 @@
     align-items: center;
     justify-content: space-between;
 
+    a{
+      width: 80%;
+      text-decoration: none;
+    }
     div{
-      max-width: 66%;
+     // max-width: 66%;
       white-space: pre-wrap;
       overflow: hidden;
     }
+
    }
     .newActive {
     background-color: gray;
     height: 4ex;    
   }
   .noActive{
-    background-color: rgb(226, 86, 86);
+    background-color: rgb(102, 78, 78);
     height: 4ex;    
 
   }
   .drag{
-    
-    opacity: 80%;
+    opacity: 20%;
     rotate: -5deg;
   }
 

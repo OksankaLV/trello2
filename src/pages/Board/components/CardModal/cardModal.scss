@@ -104,12 +104,18 @@
 }
 
 input[type=text],.inputNone{
- border: none;
  background: none;
  font-size: large;
  text-align: left;
 display: inline;
  
+}
+input[type=text]{
+border: 2px solid $secondaryColor;
+    border-radius: $radius;
+}
+.inputNone {
+    border: none;
 }
 
 button{

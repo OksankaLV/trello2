@@ -10,7 +10,6 @@ interface ICard {
   view: boolean;
   board_id?: string;
   list_id: number;
-  
 }
 
 export = ICard;

@@ -22,7 +22,7 @@ const boardsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(axiosBoard.pending, (state, action) => {
+    builder.addCase(axiosBoard.pending, (state) => {
       state.status = "pending";
     });
     builder.addCase(axiosBoard.fulfilled, (state, action) => {
@@ -30,7 +30,7 @@ const boardsSlice = createSlice({
         (state.error = ""),
         (state.data = action.payload);
     });
-    builder.addCase(axiosBoard.rejected, (state, action) => {
+    builder.addCase(axiosBoard.rejected, (state) => {
       state.status = "rejected";
     });
   },

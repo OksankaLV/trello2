@@ -10,12 +10,14 @@ import 'react-toastify/scss/main.scss';
 import { useAppDispatch } from '../../store/hooks';
 import { deActiveCard } from '../../store/listSlice';
 import { fetchBoard } from '../../store/ActionCreator';
+import ProgressBarNew from '../ProgressBar/ProgressBarNew';
 
 
 export function Home() : JSX.Element {
   const [boardData, setBoardData] = useState([]);
   const [newBoardActive, setNewBoardActive] = useState(false);
   const [progressValue, setProgressValue] = useState(0);
+  const [progress,setProgress] = useState(0)
 
   const dispatch = useAppDispatch();
 
@@ -32,6 +34,7 @@ export function Home() : JSX.Element {
       .then((data) => {
         setBoardData(data);
       })
+      .then(()=>(setProgress(100)))
       .catch((error) => {
         toast.warn(error.response.data.error);
       });
@@ -42,6 +45,7 @@ export function Home() : JSX.Element {
       <ToastContainer position="top-center" autoClose={5000} rtl={false}
         pauseOnHover={true} draggable={true} theme={'colored'} transition={Bounce} closeOnClick={true}/>
       {progressValue < 100 ? <ProgressBar value={progressValue} max={100} /> : <></>}
+      {progressValue < 100 ? <ProgressBarNew value={progress} /> : <></>}
       <h1> Мої дошки </h1>
       <FormBoard active={newBoardActive} setActive={setNewBoardActive} />
       <div className="boardList">

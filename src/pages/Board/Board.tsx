@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { titleStart, listsStart } from '../../utils/data/Lists';
+import { listsStart } from '../../utils/data/Lists';
 import { List } from './components/Lists/List';
 import { Button } from './components/Button';
 import './board.scss';
 import { Link, useParams } from 'react-router-dom';
-import { deleteBoard, getBoard, putBoard, req } from '../../utils/allRequests';
+import { deleteBoard, putBoard} from '../../utils/allRequests';
 import { FormList } from './components/FormList/FormList';
 import { ReplaceTitle } from './components/ReplaceTitle/ReplaceTitle';
-import ProgressBar from '../ProgressBar/ProgressBar';
-import {CardModal} from './components/CardModal/CardModal';
+//import ProgressBar from '../ProgressBar/ProgressBar';
+//import {CardModal} from './components/CardModal/CardModal';
 import { toast, Bounce, ToastContainer } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchBoard } from '../../store/ActionCreator';
-import IList from '../../common/interfaces/IList';
+//import IList from '../../common/interfaces/IList';
+import ProgressBarNew from '../ProgressBar/ProgressBarNew';
+import ICard from '../../common/interfaces/ICard';
 
 
-export const Board = function () {
+export const Board = function () : JSX.Element {
   //const [title, setTitle] = useState(titleStart);
   const [lists, setLists] = useState(listsStart);
-  //const [progressValue, setProgressValue] = useState(0);
+  const [progressValue, setProgressValue] = useState(0);
  // const [error, setError] = useState('');
 //const [activeCard, setActiveCard] = useState(false);
   const { board_id } = useParams();
-  const { card_id } = useParams();
-  const [onCardEdit, setOnCardEdit] = useState(false)
-
-
+//const { card_id } = useParams();
+ 
   
 const activeModalCard = useAppSelector(state => state.trello.activeCard)
 const listsFromStore = useAppSelector( state => state.trello.board.lists) ||[]
@@ -36,43 +36,40 @@ const dispatch = useAppDispatch();
 
 
 useEffect(() => {
-    dispatch(fetchBoard(board_id))
-    .then(()=>{       // setTitle(titleFromStore)
-    }).catch((error) => toast.warn(error))
+    dispatch(fetchBoard(Number(board_id)))
+      .then((req) => { setProgressValue(100); console.log(req)  // setTitle(titleFromStore)
+    }).catch(() => toast.warn(error))
     /*getBoard(board_id)
       .then((data) => {
         setLists(data.lists);
     //    setTitle(data.title); })*/
         // .catch((error) => toast.warn(error.response.data.error));
-  }, [activeModalCard]); 
+  }, [activeModalCard,lists]); 
 
   //req(setProgressValue);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.warn(error, {
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: 'colored',
-  //       transition: Bounce,
-  //       closeOnClick: true,
-  //     });
-  //   }
-  // }, [error]);
+  useEffect(() => {
+    if (error) {
+      toast.warn(error, {
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Bounce,
+        closeOnClick: true,
+      });
+    }
+  }, [error]);
 
   document.title = titleFromStore;
-  const listItems = listsFromStore.map((el:any,index:any) => (
+  const listItems = listsFromStore.map((el: { id: number; title: string; cards: ICard[]; },index: number) => (
     <List setLists={setLists} key={el.id} id={el.id} titleList={el.title} cards={el.cards} position={index}/>
   ));
   
-  console.log(card_id)
- // if (card_id!==undefined) {activeModalCard=true}
-
   return (
     <div className="wrapper">
       <ToastContainer />
-      {/* {progressValue < 100 ? <ProgressBar value={progressValue} max={100} /> : <></>} */}
+      {progressValue < 100 ? <ProgressBarNew value={progressValue} /> : <></>}
       <div className="header">
         <Link to={`/`}>
           <Button name={'На головну сторінку'} />
@@ -85,8 +82,7 @@ useEffect(() => {
       <div className="lists">{listItems} </div>
       
       <AddFormList board_id={board_id} position={listItems.length} setLists={setLists}/>
-      {/* <button onClick={()=>{newFunction()}}>test</button> */}
-      {activeModalCard && <CardModal onCardEdit={onCardEdit} setCardEdit={setOnCardEdit} />}
+    {/* {activeModalCard && <CardModal />} */}
     </div>
   );
 };
@@ -94,7 +90,7 @@ useEffect(() => {
 interface IFormList {
   board_id: string | undefined;
   position: number;
-  setLists: any;
+  setLists: React.Dispatch<React.SetStateAction<any>>;
 }
 
 function AddFormList({ board_id, position, setLists}: IFormList) {
@@ -112,7 +108,7 @@ function AddFormList({ board_id, position, setLists}: IFormList) {
         <button
           onClick={() => {
             deleteBoard(board_id);
-            setNewListActive(false);
+            setNewListActive(!newListActive);
           }}
         >
           {' '}
@@ -122,12 +118,4 @@ function AddFormList({ board_id, position, setLists}: IFormList) {
     </>
   );
 }
-
-
-
-// function newFunction(){
-//   alert('new')
-//  //dispatch(activeCard())
-// }
-
 

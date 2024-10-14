@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { getBoard, postList } from '../../../../utils/allRequests';
 import { validation } from '../../../../utils/validationText';
 import { toast } from 'react-toastify';
-import { error } from 'console';
 
 interface IForm {
   active: boolean;
@@ -13,7 +12,7 @@ interface IForm {
   setLists: React.Dispatch<React.SetStateAction<object>>;
 }
 
-function addList(titleList: string, id: string | undefined, position: number, setLists: any) {
+function addList(titleList: string, id: string | undefined, position: number, setLists: React.Dispatch<React.SetStateAction<object>>) {
   if (validation(titleList)) {
     postList(id, titleList, position).then((req) => alert(`Лист з ID = ${req.id} успішно дадано`))
     .then(() => getBoard(id)).then((data)=>setLists(data.lists))
@@ -37,7 +36,7 @@ export const FormList = ({ active, setActive, id, position, setLists }: IForm) :
           type="submit"
           onClick={() => {
             addList(titleList, id, position, setLists);
-            setActive(false)
+           setActive(!active)
           }}
         >
           Зберегти лист

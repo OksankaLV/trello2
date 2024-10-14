@@ -1,7 +1,12 @@
-import { putCards } from "../utils/allRequests";
 
-export function dragAndDrop(board_id: string | undefined, position: number){
-    const dragElements = document.querySelectorAll('div[draggable="true"]');
+import { putCards } from "../utils/allRequests";
+import IList from "./interfaces/IList";
+
+
+
+export function dragAndDrop(board_id: string | undefined, position: number) {
+  
+      const dragElements = document.querySelectorAll('div[draggable="true"]');
     const dropElements = document.querySelectorAll('.listItems');
 
     dragElements.forEach(()=>addEventListener("dragstart", onDragStart));
@@ -16,16 +21,18 @@ export function dragAndDrop(board_id: string | undefined, position: number){
 }
 
 
-function onDragStart(ev:any){
+function onDragStart(ev: any ) {
+  
     if(ev.target.className!="drag"){
     const div = document.createElement("div");
-    div.className = "noActive"
+      div.className = "noActive"
     ev.target.className = "drag"
     const el = document.querySelector(".drag")
     el?.insertAdjacentElement('afterend', div)
   }
     ev.dataTransfer.setData("text/plain", ev.target.id);
     ev.dataTransfer.effectAllowed = "move";
+  
   }
 
   function onDragLeave(ev: any){
@@ -38,7 +45,6 @@ function onDragStart(ev:any){
     if (ev.target.classList=="listItems"){
       const element = getPosition(ev.target, ev.clientY)
       if(ev.target.querySelector('.newActive') && ev.target.querySelector('.newActive')!==element){
-        // ev.target.querySelector('.newActive').remove()
         document.querySelector('.newActive')?.remove();
     
       }
@@ -68,6 +74,7 @@ function onDragStart(ev:any){
       console.log("put2")
       const newlist = el?.parentElement?.parentElement;
     if (newlist){
+  
      putCards(board_id, +data , position, +newlist?.id).then(()=>alert("+")).catch(()=>console.log("error"))  
     }
     }
@@ -77,12 +84,15 @@ function onDragStart(ev:any){
     
   }
 
-  function getPosition(container:any, y: any) {
+function getPosition(container: any, y: any) {
+    console.log(container)
   const dragEls = [ ...container.querySelectorAll(".listItems div[draggable=true]:not(.drag)")];
 
   for (const drag of dragEls){
     const pos = drag.getBoundingClientRect();
-    if (y<pos.bottom){
+    console.log(pos)
+    console.log(y+'<'+pos.bottom + " p"+pos.height/2)
+    if (y<pos.bottom+(pos.height/2)){
       return drag;
     }
   }

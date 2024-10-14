@@ -6,7 +6,7 @@ import IList from '../../../../common/interfaces/IList';
 import React, { useEffect, useState } from 'react';
 import { FormCard } from '../FormCard/FormCard';
 import { Link, useParams } from 'react-router-dom';
-import { deleteCard, deleteList, getBoard, putCards} from '../../../../utils/allRequests';
+import { deleteCard, deleteList, getBoard} from '../../../../utils/allRequests';
 import { ReplaceTitleList } from '../ReplaceTitleList/ReplaceTitleList';
 import { useAppDispatch } from '../../../../store/hooks';
 import { activeCard } from '../../../../store/listSlice';
@@ -16,7 +16,7 @@ import { dragAndDrop } from '../../../../common/dragAndDrop';
 export function List({ setLists, titleList, cards, id, position }: IList): JSX.Element {
   const { board_id } = useParams();
   const [activeCardOne, setActiveCard] = useState(false);
-  const [viewCard, setViewCard] = useState(Array(cards.length).fill(true))
+  //const [viewCard, setViewCard] = useState(Array(cards.length).fill(true))
 
 
   function addCard() {
@@ -36,108 +36,23 @@ export function List({ setLists, titleList, cards, id, position }: IList): JSX.E
       .then(() => alert(`${id}} element deleted`));
   }
 
-  function putCard(index:number){
-    const newViewCard=viewCard.map((v,i)=>{
-      if (i==index){return !v} else { return v}
-    })
-    return setViewCard(newViewCard)
-  }
+  // function putCard(index:number){
+  //   const newViewCard=viewCard.map((v,i)=>{
+  //     if (i==index){return !v} else { return v}
+  //   })
+  //   return setViewCard(newViewCard)
+  // }
 
   
-  useEffect(()=>{
+  useEffect(() => {
     dragAndDrop(board_id, position)
-  //   const dragElements = document.querySelectorAll('div[draggable="true"]');
-  //   const dropElements = document.querySelectorAll('.listItems');
-
-  //   dragElements.forEach(()=>addEventListener("dragstart", onDragStart));
-  //   dragElements.forEach(()=>addEventListener("dragleave", onDragLeave));
-  //   dragElements.forEach(()=>addEventListener("dragenter", onDragEnter));
-
-  //   dropElements.forEach(()=>addEventListener("dragover",(event)=>{
-  //     event.preventDefault();
-  //   }))
-  //   dropElements.forEach(()=>addEventListener("drop",onDrop));
-  }
-  )
-
-  // function onDragStart(ev:any){
-  //   if(ev.target.className!="drag"){
-  //   const div = document.createElement("div");
-  //   div.className = "noActive"
-  //   ev.target.className = "drag"
-  //   const el = document.querySelector(".drag")
-  //   el?.insertAdjacentElement('afterend', div)
-  // }
-  //   ev.dataTransfer.setData("text/plain", ev.target.id);
-  //   ev.dataTransfer.effectAllowed = "move";
-  // }
-
-  // function onDragLeave(ev:any){
-  //   ev.preventDefault();
-  //   document.querySelector('.noActive')?.remove();
-  // }
-
-  // function onDragEnter(ev: any){
-  //   ev.preventDefault();
-  //   if (ev.target.classList=="listItems"){
-  //     const element = getPosition(ev.target, ev.clientY)
-  //     if(ev.target.querySelector('.newActive') && ev.target.querySelector('.newActive')!==element){
-  //       ev.target.querySelector('.newActive').remove()
-    
-  //     }
-  //     if(!ev.target.querySelector('.newActive')){
-  //     const div = document.createElement("div");
-  //     div.className = "newActive"
-  //     if (element!==null){
-  //       element.insertAdjacentElement('afterend', div)
-  //     } else {
-  //       ev.target.insertBefore(div, ev.target.lastChild)
-  //     }
-
-  //   }
-    
-  // }
-  // }
-
-  // function onDrop(ev:any){
-  //   ev.preventDefault();
-    
-  //   const data = ev.dataTransfer.getData("text/plain");
-  //   const el= document.getElementById(data);
-  //   const elOld = document.querySelector('.newActive')
-    
-  //   if (el && elOld?.parentElement){
-  //     elOld.parentElement.insertBefore(el, elOld)
-  //     console.log("put2")
-  //     const newlist = el?.parentElement?.parentElement;
-  //   if (newlist){
-  //    putCards(board_id, +data , position, +newlist?.id).then(()=>alert("+")).catch(()=>console.log("error"))  
-  //   }
-  //   }
+  })
+ const dispatch = useAppDispatch();
   
-  //   document.querySelector('.newActive')?.remove();
-  //   document.querySelector('.drag')?.classList.remove('drag')
-    
-  // }
-
-  // function getPosition(container:any, y: any) {
-  // const dragEls = [ ...container.querySelectorAll(".listItems div[draggable=true]:not(.drag)")];
-
-  // for (const drag of dragEls){
-  //   const pos = drag.getBoundingClientRect();
-  //   if (y<pos.bottom){
-  //     return drag;
-  //   }
-  // }
-  // return null;
-  // }
-
-  const dispatch = useAppDispatch();
-  
-  const cardsItem = cards.map((el,index) => (
+  const cardsItem = cards.map((el) => (
    <div key={el.id} draggable="true" id={el.id}>            
-      <Link to={`./card/${el.id}`}  onClick={() => dispatch(activeCard({ listPosition: position, cardPosition: index, board_id: board_id }))}>
-        <Card setLists={setLists} key={el.id} id={el.id} title={el.title} view={viewCard[index]} board_id={board_id} list_id={id} />
+      <Link draggable='false'to={`./card/${el.id}`}  onClick={() => dispatch(activeCard({ card: el, list_id: id }))}>
+        <Card setLists={setLists} key={el.id} id={el.id} title={el.title+'-'+el.position} view={true/*viewCard[index]*/} board_id={board_id} list_id={id} />
       </Link>
         {/* <span onClick={() => putCard(index)}> 🖊️ </span>  */}
         <span onClick={() => delCard(el)}> ❌ </span>

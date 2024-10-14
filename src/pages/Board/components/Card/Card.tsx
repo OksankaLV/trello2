@@ -12,7 +12,7 @@ function replaceCard(){
 
   return (
     view? 
-    <div id={idStr}> {title} </div>: 
+    <div draggable='false' id={idStr}> {title} </div>: 
     <div id={idStr}>
     <input
         type="text"

@@ -28,7 +28,7 @@ export function req(setProgressValue: Dispatch<SetStateAction<number>>) {
   axios.interceptors.response.use(
     function (option) {
       clearInterval(progress);
-      progressValue = 90;
+
       setProgressValue((progressValue = progressValue + 10));
       return option;
     },
