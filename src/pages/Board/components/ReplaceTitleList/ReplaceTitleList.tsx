@@ -1,34 +1,30 @@
-import React, { useState } from 'react';
-import { getBoard, putList } from '../../../../utils/allRequests';
-import { validation } from '../../../../utils/validationText';
-import '../ReplaceTitle/replaceTitle.scss';
+import React, { useState } from "react";
+import { getBoard, putList } from "../../../../utils/allRequests";
+import { validation } from "../../../../utils/validationText";
+import "../ReplaceTitle/replaceTitle.scss";
 
 interface ITitleList {
-    board_id: string|undefined;
-    list_id: number;
-    titleList: string;
-   // setTitleList: React.Dispatch<React.SetStateAction<string>>;
-    position: number;
-    setLists: React.Dispatch<object>;
-  }
+  board_id: string | undefined;
+  list_id: number;
+  titleList: string;
+  position: number;
+  setLists: React.Dispatch<object>;
+}
 
 export function ReplaceTitleList(props: ITitleList): JSX.Element {
   const [input, setInput] = useState(false);
-  const [title, setTitle] = useState(props.titleList)
+  const [title, setTitle] = useState(props.titleList);
 
   const createTitle = function () {
     if (validation(title)) {
-        putList(props.board_id, title, props.list_id, props.position)
-        .then(()=>alert(`title updated`))
+      putList(props.board_id, title, props.list_id, props.position)
+        .then(() => alert(`title updated`))
         .then(() => getBoard(props.board_id))
-        .then((data)=>props.setLists(data.lists))
+        .then((data) => props.setLists(data.lists))
         .then((data: any) => {
-//props.setTitleList(data.titleList);
-          
           setInput(false);
         });
     } else {
-    //  props.setTitleList(props.titleList);
       setInput(true);
     }
   };
@@ -40,7 +36,7 @@ export function ReplaceTitleList(props: ITitleList): JSX.Element {
           value={title}
           onChange={(event) => setTitle(event?.target.value)}
           onKeyDown={(event) => {
-            if (event?.key === 'Enter') {
+            if (event?.key === "Enter") {
               createTitle();
             }
           }}

@@ -6,38 +6,38 @@ import { toast } from "react-toastify";
 const token = 123;
 const header = { Authorization: `Bearer ${token}` };
 
-let progressValue = 0;
+// let progressValue = 0;
 
-export function req(setProgressValue: Dispatch<SetStateAction<number>>) {
-  let progress: NodeJS.Timer;
-  axios.interceptors.request.use(
-    function (option) {
-      setProgressValue(progressValue);
-      progressValue < 95
-        ? (progressValue = progressValue + 5)
-        : (progressValue = progressValue - 5);
-      progress = setInterval(() => setProgressValue(progressValue), 100);
-      return option;
-    },
-    function (error) {
-      toast.warn(error);
-      return Promise.reject(error);
-    }
-  );
+// export function req(setProgressValue: Dispatch<SetStateAction<number>>) {
+//   let progress: NodeJS.Timer;
+//   axios.interceptors.request.use(
+//     function (option) {
+//       setProgressValue(progressValue);
+//       progressValue < 95
+//         ? (progressValue = progressValue + 5)
+//         : (progressValue = progressValue - 5);
+//       progress = setInterval(() => setProgressValue(progressValue), 100);
+//       return option;
+//     },
+//     function (error) {
+//       toast.warn(error);
+//       return Promise.reject(error);
+//     }
+//   );
 
-  axios.interceptors.response.use(
-    function (option) {
-      clearInterval(progress);
+//   axios.interceptors.response.use(
+//     function (option) {
+//       clearInterval(progress);
 
-      setProgressValue((progressValue = progressValue + 10));
-      return option;
-    },
-    function (error) {
-      toast.warn(error);
-      return Promise.reject(error);
-    }
-  );
-}
+//       setProgressValue((progressValue = progressValue + 10));
+//       return option;
+//     },
+//     function (error) {
+//       toast.warn(error);
+//       return Promise.reject(error);
+//     }
+//   );
+// }
 
 export const getBoards = async (
   setProgressValue: Dispatch<SetStateAction<number>>
@@ -68,9 +68,9 @@ export const postBoard = async (value: string, custom?: object) => {
 export const getBoard = async (board_id: string | undefined) => {
   const { data } = await axios.get(`${api.baseURL}/board/${board_id}`, {
     headers: header,
-    onDownloadProgress: () => {
-      progressValue = 100;
-    },
+    // onDownloadProgress: () => {
+    //   progressValue = 100;
+    // },
   });
 
   return data;
@@ -102,7 +102,6 @@ export const postList = async (
   title: string,
   position?: number
 ) => {
-  console.log(title, position);
   const { data } = await axios.post(
     `${api.baseURL}/board/${board_id}/list`,
     {
@@ -144,7 +143,6 @@ export const putList = async (
   list_id: number,
   position: number
 ) => {
-  console.log(`${api.baseURL}/board/${board_id}/list/${list_id}`);
   const { data } = await axios.put(
     `${api.baseURL}/board/${board_id}/list/${list_id}`,
     {
