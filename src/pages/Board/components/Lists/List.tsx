@@ -1,16 +1,11 @@
 import ICard from "../../../../common/interfaces/ICard";
 import { Card } from "../Card/Card";
-import { Button } from "../Button";
 import "./list.scss";
 import IList from "../../../../common/interfaces/IList";
 import React, { useEffect, useState } from "react";
 import { FormCard } from "../FormCard/FormCard";
 import { Link, useParams } from "react-router-dom";
-import {
-  deleteCard,
-  deleteList,
-  getBoard,
-} from "../../../../utils/allRequests";
+import { deleteCard, deleteList, getBoard } from "../../../../api/allRequests";
 import { ReplaceTitleList } from "../ReplaceTitleList/ReplaceTitleList";
 import { useAppDispatch } from "../../../../store/hooks";
 import { activeCard } from "../../../../store/listSlice";
@@ -33,14 +28,12 @@ export function List({
   function delCard(el: ICard) {
     deleteCard(board_id, el.id)
       .then(() => getBoard(board_id))
-      .then((data) => setLists(data.lists))
-      .then(() => alert(`${el.title} element deleted`));
+      .then((data) => setLists(data.lists));
   }
   function delList() {
     deleteList(board_id, id)
       .then(() => getBoard(board_id))
-      .then((data) => setLists(data.lists))
-      .then(() => alert(`${id}} element deleted`));
+      .then((data) => setLists(data.lists));
   }
 
   useEffect(() => {
@@ -81,6 +74,7 @@ export function List({
           setLists={setLists}
         />
       </h2>
+
       <div className="listItems">{cardsItem} </div>
       <FormCard
         active={activeCardOne}
@@ -93,10 +87,10 @@ export function List({
       {!activeCardOne ? (
         <div className="buttonsList">
           <div onClick={addCard}>
-            <Button name={"Додати картку"} />
+            <button>Додати картку</button>
           </div>
           <div onClick={delList}>
-            <Button name={"❌"} />
+            <button> Видалити картку ❌ </button>
           </div>
         </div>
       ) : (

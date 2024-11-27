@@ -1,7 +1,8 @@
 import "./formBoard.scss";
 import React, { useEffect, useState } from "react";
-import { postBoard } from "../../../../utils/allRequests";
+import { postBoard } from "../../../../api/allRequests";
 import { validation } from "../../../../utils/validationText";
+import { setError } from "../../../../store/listSlice";
 
 interface IForm {
   active: boolean;
@@ -10,9 +11,7 @@ interface IForm {
 
 function addBoard(titleBoard: string, custom: object) {
   if (validation(titleBoard)) {
-    postBoard(titleBoard, custom)
-      .then((req) => alert(`Дошку з ID = ${req.id} успішно дадано`))
-      .catch((error) => alert(error));
+    postBoard(titleBoard, custom).catch((error) => alert(error));
   } else {
     alert(
       "ім'я дошки не повинно бути порожнім, у ньому можна використовувати цифри, літери (а, А), пробіли, тире, крапки, нижні підкреслення"
@@ -30,6 +29,7 @@ export const FormBoard = ({ active, setActive }: IForm): JSX.Element => {
         <input
           type="text"
           placeholder={"Введіть назву дошки"}
+          autoFocus={true}
           value={titleBoard}
           onChange={(event) => setTitleBoard(event?.target.value)}
         />

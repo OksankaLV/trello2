@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./copyModal.scss";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { axiosBoard } from "../../../../store/ActionCreator";
+import { getBoardWithCreateAsyncThunk } from "../../../../store/ActionCreator";
 import IBoard from "../../../../common/interfaces/IBoard";
-import { deleteCard, getBoard, postCard } from "../../../../utils/allRequests";
+import { deleteCard, getBoard, postCard } from "../../../../api/allRequests";
 import { useParams } from "react-router-dom";
 import IList from "../../../../common/interfaces/IList";
 
@@ -31,14 +31,14 @@ export const CopyMoveModal = ({
   const [listAction, setListAction] = useState("");
   const [lists, setLists] = useState({ lists: [] });
   const [position, setPosition] = useState("");
-  const { card_id } = useParams();
-  const { board_id } = useParams();
+  const { board_id, card_id } = useParams();
 
   useEffect(() => {
     if (status === "") {
-      dispatch(axiosBoard());
+      dispatch(getBoardWithCreateAsyncThunk());
     }
   }, [status, board]);
+
   useEffect(() => {
     getBoard(boardIdAction).then((data) => {
       setLists(data);

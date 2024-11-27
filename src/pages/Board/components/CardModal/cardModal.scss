@@ -42,7 +42,7 @@
     p{
         height: max-content;
         text-align: left;
-        padding: 0px 5px 20px 5px;
+        padding: 0px 5px;
     }
 }
 .partModal{
@@ -108,18 +108,20 @@ input[type=text],.inputNone{
  font-size: large;
  text-align: left;
 display: inline;
+
  
 }
 input[type=text]{
-border: 2px solid $secondaryColor;
-    border-radius: $radius;
+    border: none
+// border: 2px solid $secondaryColor;
+//     border-radius: $radius;
 }
 .inputNone {
     border: none;
 }
 
 button{
-    width: 100px;
+    min-width: 96px;
     margin-top: 5px;
     cursor: pointer;
 }

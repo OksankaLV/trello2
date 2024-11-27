@@ -6,7 +6,7 @@ import {
   deActiveCard,
   setError,
 } from "../../../../store/listSlice";
-import { deleteCard, getBoard, putCard } from "../../../../utils/allRequests";
+import { deleteCard, getBoard, putCard } from "../../../../api/allRequests";
 import { validation } from "../../../../utils/validationText";
 import { fetchBoard } from "../../../../store/ActionCreator";
 import { CopyMoveModal } from "../CopyModal/CopyModal";
@@ -16,8 +16,7 @@ import IList from "../../../../common/interfaces/IList";
 import ICard from "../../../../common/interfaces/ICard";
 
 export const CardModalId = (): React.JSX.Element => {
-  const { board_id } = useParams();
-  const { card_id } = useParams();
+  const { board_id, card_id } = useParams();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -54,7 +53,6 @@ export const CardModalId = (): React.JSX.Element => {
 
   function replaceCard() {
     putCard(board_id, Number(card_id), titleCard, list_id, description)
-      .then(() => alert("Зміни збережено"))
       .then(() => dispatch(fetchBoard(board_id)))
       .then(() => navigate(-1))
       .catch((error) => dispatch(setError(error)));
@@ -63,7 +61,6 @@ export const CardModalId = (): React.JSX.Element => {
   function delCard() {
     deleteCard(board_id, card_id)
       .then(() => dispatch(deActiveCard()))
-      .then(() => alert("delete"))
       .then(() => dispatch(fetchBoard(board_id)))
       .then(() => navigate(-1))
       .catch((error) => dispatch(setError(error)));
@@ -94,7 +91,9 @@ export const CardModalId = (): React.JSX.Element => {
                     if (validation(e.target.value)) {
                       setTitleCard(e.target.value);
                     } else {
-                      alert("error");
+                      () => {
+                        dispatch(setError("error in title Card"));
+                      };
                     }
                   }}
                 />

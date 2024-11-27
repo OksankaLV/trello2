@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Board } from "../Home/components/Board/Board";
+import { BoardOnHome } from "./components/BoardOnHome/BoardOnHome";
 import "./home.scss";
-import { Link } from "react-router-dom";
-import { getBoards } from "../../utils/allRequests";
+import { Link, Navigate } from "react-router-dom";
+import { getBoards } from "../../api/allRequests";
 import { FormBoard } from "./components/FormBoard/FormBoard";
 import { Bounce, ToastContainer, toast } from "react-toastify";
-import "react-toastify/scss/main.scss";
 import { useAppDispatch } from "../../store/hooks";
-//import { deActiveCard } from "../../store/listSlice";
 import { fetchBoard } from "../../store/ActionCreator";
 import ProgressBarNew from "../ProgressBar/ProgressBarNew";
 
@@ -31,7 +29,11 @@ export function Home(): JSX.Element {
         key={el.id}
         to={`board/${el.id}`}
       >
-        <Board key={el.id} title={el.title} custom={el.custom}></Board>
+        <BoardOnHome
+          key={el.id}
+          title={el.title}
+          custom={el.custom}
+        ></BoardOnHome>
       </Link>
     )
   );
@@ -49,6 +51,7 @@ export function Home(): JSX.Element {
 
   return (
     <section className="wrapper">
+      {/* <Navigate replace to="/login" /> */}
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -60,7 +63,7 @@ export function Home(): JSX.Element {
         closeOnClick={true}
       />
       {progressValue < 100 ? <ProgressBarNew value={progressValue} /> : <></>}
-      <h1> Мої дошки </h1>
+      <h1 className="home-title title-pacifico"> Мої дошки </h1>
       <FormBoard active={newBoardActive} setActive={setNewBoardActive} />
       <div className="boardList">
         <div

@@ -2,11 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import { type RootState } from "./hooks";
 
 export interface IUser {
-  user: string;
+  email: string | null;
+  token: string | null;
+  id: number | null;
 }
 
 const initialState: IUser = {
-  user: "",
+  email: "",
+  token: "",
+  id: null,
 };
 
 const userSlice = createSlice({
@@ -14,11 +18,18 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload;
+      state.email = action.payload.email;
+      state.token = action.payload.token;
+      state.id = action.payload.id;
+    },
+    removeUser: (state) => {
+      state.email = null;
+      state.token = null;
+      state.id = null;
     },
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, removeUser } = userSlice.actions;
 export const selectCard = (state: RootState) => state.user;
 export default userSlice.reducer;

@@ -1,6 +1,6 @@
 import ICard from "../../../../common/interfaces/ICard";
 import React, { useState } from "react";
-import { getBoard, putCard } from "../../../../utils/allRequests";
+import { getBoard, putCard } from "../../../../api/allRequests";
 
 export function Card({
   setLists,

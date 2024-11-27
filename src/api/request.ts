@@ -1,12 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { api } from '../common/constants';
+import { api } from "../common/constants";
+const token = localStorage.getItem("tokenStorage");
 
 const instance = axios.create({
   baseURL: api.baseURL,
   headers: {
-    'Content-Type': 'application/json',
-    Authorization: 'Bearer 123',
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
   },
 });
 

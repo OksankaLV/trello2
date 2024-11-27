@@ -1,6 +1,9 @@
 import "./App.css";
+import "react-toastify/scss/main.scss";
 import { Home } from "./pages/Home/Home";
 import { Board } from "./pages/Board/Board";
+import { Registration } from "./pages/Registration/Registration";
+import Login from "./pages/Login/Login";
 import { CardModalId } from "./pages/Board/components/CardModal/CardModalId";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import React from "react";
@@ -13,6 +16,8 @@ function App(): React.JSX.Element {
         <ToastContainer position="top-center" autoClose={5000} rtl={false} />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Registration />} />
           <Route path="/board/:board_id" element={<Board />} />
           <Route
             path="/board/:board_id/card/:card_id"

@@ -16,6 +16,16 @@
   align-items: center;
   justify-content: space-between;
   @include backraund(#27ae6030);
+  max-width: 200px;
+
+  opacity: 0;
+  animation: ani 2s forwards;
+
+  @keyframes ani {
+    0% {opacity: 0;}
+    50% {opacity: 30;}
+    100% {opacity: 100;}
+  }
 
 
   button {
@@ -38,8 +48,7 @@
   overflow-y: auto; //scroll - allways
   scroll-behavior: smooth;
   height: 150px;
-  min-width: 80px;
-  max-width: 180px;
+  width: 100%;
   div {
     /*border: 1px $secondaryColor solid;*/
     border-radius: $radius;

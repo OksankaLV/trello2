@@ -1,3 +1,7 @@
+.home-title{
+  margin: 20px;
+}
+
 .boardList {
   display: flex;
   flex-wrap: wrap;
@@ -6,16 +10,15 @@
   }
 }
 
-button {
-  margin-top: 20px;
-}
 p {
   margin: 0px;
 }
 
-#addBoard {
+.board{
+  &:first-child{
   text-align: center;
   font-weight: bold;
   font-size: large;
+}
 }
 

@@ -1,6 +1,6 @@
 import "./formList.scss";
 import React, { useState } from "react";
-import { getBoard, postList } from "../../../../utils/allRequests";
+import { getBoard, postList } from "../../../../api/allRequests";
 import { validation } from "../../../../utils/validationText";
 import { toast } from "react-toastify";
 
@@ -20,7 +20,6 @@ function addList(
 ) {
   if (validation(titleList)) {
     postList(id, titleList, position)
-      .then((req) => alert(`Лист з ID = ${req.id} успішно дадано`))
       .then(() => getBoard(id))
       .then((data) => setLists(data.lists))
       .catch((error) => toast.warn(error));
@@ -42,23 +41,34 @@ export const FormList = ({
 
   return (
     <form className={active ? "newList" : "noneList"}>
-      <div className="formList">
+      <div className="formList list">
         {" "}
         <input
           type="text"
+          autoFocus={true}
           placeholder={"Введіть назву листа"}
           value={titleList}
           onChange={(event) => setTitleList(event?.target.value)}
         />
-        <button
-          type="submit"
-          onClick={() => {
-            addList(titleList, id, position, setLists);
-            setActive(!active);
-          }}
-        >
-          Зберегти лист
-        </button>
+        <div>
+          <button
+            type="submit"
+            onClick={() => {
+              addList(titleList, id, position, setLists);
+              setActive(!active);
+            }}
+          >
+            Зберегти лист
+          </button>
+          <button
+            type="submit"
+            onClick={() => {
+              setActive(!active);
+            }}
+          >
+            Відмінити
+          </button>
+        </div>
       </div>
     </form>
   );

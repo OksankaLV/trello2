@@ -2,8 +2,18 @@ input[type='text'],
 p {
   background: none !important;
   background-color: none;
+  border: none;
   padding: 0px;
   height: 21px;
   margin: 0px;
   text-align: center;
+  max-width: 200px;
+}
+
+input:focus{
+  border: none;
+}
+
+.title__input:focus{
+ border: none;
 }

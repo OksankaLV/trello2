@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { axiosBoard } from "./ActionCreator";
+import { getBoardWithCreateAsyncThunk } from "./ActionCreator";
 
 export interface IBoardState {
   status: string;
@@ -22,15 +22,15 @@ const boardsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(axiosBoard.pending, (state) => {
+    builder.addCase(getBoardWithCreateAsyncThunk.pending, (state) => {
       state.status = "pending";
     });
-    builder.addCase(axiosBoard.fulfilled, (state, action) => {
+    builder.addCase(getBoardWithCreateAsyncThunk.fulfilled, (state, action) => {
       (state.status = "fulfilled"),
         (state.error = ""),
         (state.data = action.payload);
     });
-    builder.addCase(axiosBoard.rejected, (state) => {
+    builder.addCase(getBoardWithCreateAsyncThunk.rejected, (state) => {
       state.status = "rejected";
     });
   },

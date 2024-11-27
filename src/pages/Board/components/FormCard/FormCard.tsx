@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getBoard, postCard } from "../../../../utils/allRequests";
+import { getBoard, postCard } from "../../../../api/allRequests";
 import { validation } from "../../../../utils/validationText";
 import "./formCard.scss";
 import { toast } from "react-toastify";
@@ -29,7 +29,6 @@ export const FormCard = ({
   ) {
     if (validation(titleCard)) {
       postCard(titleCard, board_id, list_id, id)
-        .then((req) => alert(`Картку з ID = ${req.id} успішно дадано`))
         .then(() => getBoard(board_id))
         .then((data) => setLists(data.lists))
         .catch((error) => toast.warn(error));

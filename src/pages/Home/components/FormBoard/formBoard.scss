@@ -1,3 +1,5 @@
+@import '../../../../utils/constants.scss';
+
 .formBoard {
   position: relative;
   display: flex;
@@ -6,6 +8,11 @@
     padding: 0px;
     margin: 0px;
     align-items: center;  }
+
+  input {
+    margin: 0px 5px;
+    outline: none;
+   }
 }
 
 .noneBoard {
@@ -14,9 +21,12 @@
 
 .newBoard {
   width: 33%;
+  max-width: 250px;
   position: absolute;
   left: 180px;
-  background-color: rgb(235 208 235);
+  background-color: $backgroundColorModal;
+  padding: 24px;
+  
 }
 span{
   display: block;

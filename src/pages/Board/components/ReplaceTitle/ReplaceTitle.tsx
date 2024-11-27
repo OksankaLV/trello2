@@ -3,13 +3,14 @@ import { validation } from "../../../../utils/validationText";
 import "./replaceTitle.scss";
 import { useAppDispatch } from "../../../../store/hooks";
 import { fetchBoard } from "../../../../store/ActionCreator";
+import { putBoard } from "../../../../api/allRequests";
 
 interface ITitle {
   board_id: string | undefined;
   title: string;
+  custom?: object;
   id?: number;
   position?: number;
-  nameRequest: any;
 }
 export function ReplaceTitle(props: ITitle): React.JSX.Element {
   const [input, setInput] = useState(false);
@@ -19,9 +20,9 @@ export function ReplaceTitle(props: ITitle): React.JSX.Element {
 
   const createTitle = function () {
     if (validation(titleInput)) {
-      props
-        .nameRequest(props.board_id, titleInput, props.id, props.position)
-        .then(() => dispatch(fetchBoard(props.board_id)));
+      putBoard(props.board_id, titleInput).then(() =>
+        dispatch(fetchBoard(props.board_id))
+      );
       setInput(false);
     } else {
       setInput(false);
@@ -32,6 +33,8 @@ export function ReplaceTitle(props: ITitle): React.JSX.Element {
       {input ? (
         <input
           type="text"
+          autoFocus={true}
+          className="title__input"
           value={titleInput}
           placeholder={props.title}
           onChange={(event) => setTitleInput(event?.target.value)}

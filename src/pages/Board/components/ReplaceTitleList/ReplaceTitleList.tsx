@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getBoard, putList } from "../../../../utils/allRequests";
+import { getBoard, putList } from "../../../../api/allRequests";
 import { validation } from "../../../../utils/validationText";
 import "../ReplaceTitle/replaceTitle.scss";
 
@@ -18,7 +18,6 @@ export function ReplaceTitleList(props: ITitleList): JSX.Element {
   const createTitle = function () {
     if (validation(title)) {
       putList(props.board_id, title, props.list_id, props.position)
-        .then(() => alert(`title updated`))
         .then(() => getBoard(props.board_id))
         .then((data) => props.setLists(data.lists))
         .then((data: any) => {
@@ -34,6 +33,7 @@ export function ReplaceTitleList(props: ITitleList): JSX.Element {
         <input
           type="text"
           value={title}
+          autoFocus={true}
           onChange={(event) => setTitle(event?.target.value)}
           onKeyDown={(event) => {
             if (event?.key === "Enter") {

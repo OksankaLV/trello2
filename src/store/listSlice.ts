@@ -29,6 +29,9 @@ const listSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    setColorBoard: (state, action) => {
+      state.board.custom = action.payload;
+    },
     boardFetching: (state) => {
       state.status = "isLoading";
     },
@@ -47,6 +50,7 @@ export const {
   activeCard,
   deActiveCard,
   setError,
+  setColorBoard,
   boardFetching,
   boardFetchingError,
   boardFetchingSuccess,

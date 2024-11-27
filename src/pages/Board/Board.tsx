@@ -4,16 +4,17 @@ import { List } from "./components/Lists/List";
 import { Button } from "./components/Button";
 import "./board.scss";
 import { Link, useParams } from "react-router-dom";
-import { deleteBoard, putBoard } from "../../utils/allRequests";
-import { FormList } from "./components/FormList/FormList";
+import { putBoard } from "../../api/allRequests";
 import { ReplaceTitle } from "./components/ReplaceTitle/ReplaceTitle";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchBoard } from "../../store/ActionCreator";
 import ProgressBarNew from "../ProgressBar/ProgressBarNew";
 import ICard from "../../common/interfaces/ICard";
+import { AddFormList } from "./components/AddFormList/AddFormList";
+import { setColorBoard } from "../../store/listSlice";
 
-export const Board = function (): JSX.Element {
+export const Board = function (): React.JSX.Element {
   const [lists, setLists] = useState(listsStart);
   const [progressValue, setProgressValue] = useState(0);
   const { board_id } = useParams();
@@ -22,6 +23,7 @@ export const Board = function (): JSX.Element {
   const listsFromStore =
     useAppSelector((state) => state.trello.board.lists) || [];
   const titleFromStore = useAppSelector((state) => state.trello.board.title);
+  const custom = useAppSelector((state) => state.trello.board.custom);
   const error = useAppSelector((state) => state.trello.error);
 
   const dispatch = useAppDispatch();
@@ -63,72 +65,44 @@ export const Board = function (): JSX.Element {
   );
 
   return (
-    <div className="wrapper">
-      <ToastContainer />
-      {progressValue < 100 ? <ProgressBarNew value={progressValue} /> : <></>}
-      <div className="header">
+    <>
+      <nav>
+        {" "}
         <Link to={`/`}>
           <Button name={"На головну сторінку"} />
-        </Link>
-        <div className="title">
-          <ReplaceTitle
-            board_id={board_id}
-            title={titleFromStore}
-            nameRequest={putBoard}
+        </Link>{" "}
+        <div>
+          <input
+            style={custom}
+            id="color-board"
+            className="color-board"
+            type="color"
+            value=""
+            onChange={(event) =>
+              dispatch(setColorBoard({ background: event?.target.value }))
+            }
           />
+          <Link to={`/login`}>
+            <Button name={"Вийти"} />
+          </Link>{" "}
         </div>
-        <div>{board_id}</div>
+      </nav>
+      <div className="wrapper" style={custom}>
+        <ToastContainer />
+        {progressValue < 100 ? <ProgressBarNew value={progressValue} /> : <></>}
+        <div className="header">
+          <div className="title title-pacifico">
+            <ReplaceTitle board_id={board_id} title={titleFromStore} />
+          </div>
+        </div>
+        <div className="lists ">{listItems} </div>
+
+        <AddFormList
+          board_id={board_id}
+          position={listItems.length}
+          setLists={setLists}
+        />
       </div>
-      <div className="lists">{listItems} </div>
-
-      <AddFormList
-        board_id={board_id}
-        position={listItems.length}
-        setLists={setLists}
-      />
-    </div>
-  );
-};
-
-interface IFormList {
-  board_id: string | undefined;
-  position: number;
-  setLists: React.Dispatch<React.SetStateAction<any>>;
-}
-
-function AddFormList({ board_id, position, setLists }: IFormList) {
-  const [newListActive, setNewListActive] = useState(false);
-  if (newListActive) {
-    return (
-      <FormList
-        active={newListActive}
-        setActive={setNewListActive}
-        id={board_id}
-        position={position}
-        setLists={setLists}
-      />
-    );
-  }
-  return (
-    <>
-      <button
-        className="listButton"
-        onClick={() => setNewListActive(!newListActive)}
-      >
-        {" "}
-        Додати новий список{" "}
-      </button>
-      <Link to="/">
-        <button
-          onClick={() => {
-            deleteBoard(board_id);
-            setNewListActive(!newListActive);
-          }}
-        >
-          {" "}
-          Видалити дошку{" "}
-        </button>{" "}
-      </Link>
     </>
   );
-}
+};

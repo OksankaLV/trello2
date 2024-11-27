@@ -1,43 +1,9 @@
 import axios from "axios";
 import api from "../common/constants/api";
 import { Dispatch, SetStateAction } from "react";
-import { toast } from "react-toastify";
 
 const token = 123;
 const header = { Authorization: `Bearer ${token}` };
-
-// let progressValue = 0;
-
-// export function req(setProgressValue: Dispatch<SetStateAction<number>>) {
-//   let progress: NodeJS.Timer;
-//   axios.interceptors.request.use(
-//     function (option) {
-//       setProgressValue(progressValue);
-//       progressValue < 95
-//         ? (progressValue = progressValue + 5)
-//         : (progressValue = progressValue - 5);
-//       progress = setInterval(() => setProgressValue(progressValue), 100);
-//       return option;
-//     },
-//     function (error) {
-//       toast.warn(error);
-//       return Promise.reject(error);
-//     }
-//   );
-
-//   axios.interceptors.response.use(
-//     function (option) {
-//       clearInterval(progress);
-
-//       setProgressValue((progressValue = progressValue + 10));
-//       return option;
-//     },
-//     function (error) {
-//       toast.warn(error);
-//       return Promise.reject(error);
-//     }
-//   );
-// }
 
 export const getBoards = async (
   setProgressValue: Dispatch<SetStateAction<number>>
@@ -68,9 +34,6 @@ export const postBoard = async (value: string, custom?: object) => {
 export const getBoard = async (board_id: string | undefined) => {
   const { data } = await axios.get(`${api.baseURL}/board/${board_id}`, {
     headers: header,
-    // onDownloadProgress: () => {
-    //   progressValue = 100;
-    // },
   });
 
   return data;
@@ -239,4 +202,34 @@ export const deleteCard = async (
     }
   );
   return data;
+};
+
+//creating a user/regisration
+export const postUser = async (email: string, pass: string | null) => {
+  if (pass !== null) {
+    const data = await axios.post(`${api.baseURL}/user`, {
+      email: email,
+      password: pass,
+    });
+    return data; //201 Created {result: Created, id: 1213332}
+  }
+};
+
+//user search by username
+export const getUser = async (email: string) => {
+  const username = email.split("@")[0];
+  const data = await axios.get(`${api.baseURL}/user`, {
+    // :emailOrUsername=username,
+  });
+  return data; //200 Ok [{id:1, username: 'cwe'}, {id: 23, username: 'cwemmmm'}]
+};
+
+// authorization
+export const postLogin = async (email: string, pass: string) => {
+  const data = await axios.post(`${api.baseURL}/login`, {
+    email: email,
+    password: pass,
+  });
+  console.log(data);
+  return data; //200 Ok {result: "Authorized", token: "jhgfdredfyu", refreshToken: "gfdrtyuih"}
 };

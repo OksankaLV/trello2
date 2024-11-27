@@ -1,0 +1,50 @@
+@import '../../utils/constants.scss';
+
+.wrapperRegistration{
+    width: 100vw;
+        height: 100vh;
+        background-color: $wrapperColor;
+    
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: fixed;
+        box-sizing: border-box;
+        justify-content: center;
+        overflow: auto;
+        top: 0;
+        left: 0;
+        text-align: center;
+}
+.registration{
+background-color: $backgroundColorModal;
+    width: 100%;
+    border-radius: 20px;
+    border: 2px black solid;
+    width: 40vw;
+    left: 0px;
+    right: 0px;
+
+    input {
+            border: 2px solid $secondaryColor;
+            border-radius: $radius;
+        }
+
+    button{
+        margin-top: 20px;
+    }
+
+}
+.passEnter{
+    
+    height: 10px;
+    display: flex;
+    justify-content: center;
+
+    div {
+        width: 25px;
+        margin: 2px 3px;
+        height: 5px;
+background-color: red
+    }
+}

@@ -11,12 +11,12 @@ import {
 import { AppDispatch } from "./hooks";
 import { Key } from "react";
 
-
 const token = 123;
 const header = { Authorization: `Bearer ${token}` };
 
 export const fetchBoard =
-  (board_id: number|Key|null|undefined) => async (dispatch: AppDispatch) => {
+  (board_id: number | Key | null | undefined) =>
+  async (dispatch: AppDispatch) => {
     try {
       dispatch(boardFetching());
       const response = await axios.get(`${api.baseURL}/board/${board_id}`, {
@@ -28,8 +28,8 @@ export const fetchBoard =
     }
   };
 
-export const axiosBoard = createAsyncThunk(
-  "activeList/axiosBoard",
+export const getBoardWithCreateAsyncThunk = createAsyncThunk(
+  "activeList/getBoardWithCreateAsyncThunk",
   async (name, { rejectWithValue }) => {
     const response = await axios.get(`${api.baseURL}/board`, {
       headers: header,
