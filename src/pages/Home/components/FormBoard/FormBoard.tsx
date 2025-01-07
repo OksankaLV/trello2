@@ -1,8 +1,7 @@
 import "./formBoard.scss";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { postBoard } from "../../../../api/allRequests";
 import { validation } from "../../../../utils/validationText";
-import { setError } from "../../../../store/listSlice";
 import { toast } from "react-toastify";
 
 interface IForm {

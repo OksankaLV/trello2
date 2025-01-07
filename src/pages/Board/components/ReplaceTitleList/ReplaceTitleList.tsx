@@ -20,7 +20,7 @@ export function ReplaceTitleList(props: ITitleList): JSX.Element {
       putList(props.board_id, title, props.list_id, props.position)
         .then(() => getBoard(props.board_id))
         .then((data) => props.setLists(data.lists))
-        .then((data: any) => {
+        .then(() => {
           setInput(false);
         });
     } else {

@@ -1,5 +1,4 @@
 import { putCards } from "../api/allRequests";
-import IList from "./interfaces/IList";
 
 export function dragAndDrop(board_id: string | undefined, position: number) {
   const dragElements = document.querySelectorAll('div[draggable="true"]');
