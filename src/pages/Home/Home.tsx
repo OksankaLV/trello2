@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { BoardOnHome } from "./components/BoardOnHome/BoardOnHome";
 import "./home.scss";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getBoards } from "../../api/allRequests";
 import { FormBoard } from "./components/FormBoard/FormBoard";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import { useAppDispatch } from "../../store/hooks";
 import { fetchBoard } from "../../store/ActionCreator";
 import ProgressBarNew from "../ProgressBar/ProgressBarNew";
+import { removeItemTokenStorage, useAuth } from "../../hooks/use-auth";
+import Login from "../Login/Login";
 
 export function Home(): JSX.Element {
   const [boardData, setBoardData] = useState([]);
@@ -39,19 +41,20 @@ export function Home(): JSX.Element {
   );
 
   useEffect(() => {
-    // dispatch(deActiveCard());
-    getBoards(setProgressValue)
-      .then((data) => {
-        setBoardData(data);
-      })
-      .catch((error) => {
-        toast.warn(error.response.data.error);
-      });
+    if (useAuth().token) {
+      getBoards(setProgressValue)
+        .then((data) => {
+          setBoardData(data);
+        })
+        .catch((error) => {
+          toast.warn(error.response.data.error);
+        });
+    }
   }, []);
 
-  return (
+  return useAuth().token ? (
     <section className="wrapper">
-      {/* <Navigate replace to="/login" /> */}
+      {/* {useAuth().token == undefined && <Navigate replace to="/login" />} */}
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -63,6 +66,9 @@ export function Home(): JSX.Element {
         closeOnClick={true}
       />
       {progressValue < 100 ? <ProgressBarNew value={progressValue} /> : <></>}
+      <Link className="home-exit" to="/login" onClick={removeItemTokenStorage}>
+        Вийти
+      </Link>
       <h1 className="home-title title-pacifico"> Мої дошки </h1>
       <FormBoard active={newBoardActive} setActive={setNewBoardActive} />
       <div className="boardList">
@@ -78,5 +84,7 @@ export function Home(): JSX.Element {
         {list}
       </div>
     </section>
+  ) : (
+    <Login />
   );
 }

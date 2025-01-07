@@ -18,12 +18,10 @@
 }
 .bodyModal{
     background-color: $backgroundColorModal;
-    width: 100%;
     border-radius: 20px;
     border: 2px black solid;
     width: 90vw;
-    left: 0px;
-    right: 0px;
+    padding: 10px;
 }
 .titleModal{
    display: flex;

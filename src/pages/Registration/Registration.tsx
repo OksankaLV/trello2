@@ -1,25 +1,37 @@
 import React, { useState } from "react";
 import "./registration.scss";
 import { Link } from "react-router-dom";
-import { postUser } from "../../api/allRequests";
-import { toast } from "react-toastify";
+import { postLogin, postUser } from "../../api/allRequests";
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import Password from "../../utils/validatorPassword";
+import validator from "validator";
 
 export function Registration(): React.JSX.Element {
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [password, setPassword] = useState("");
-  const [twoPassword, setTwoPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  function passValid() {
-    if (twoPassword === password) {
-      return password;
+  function messageError() {
+    if (confirmPassword === password) {
+      setMessage("");
     } else {
-      toast.warn("Перевірте корректність введених данних");
-      return null;
+      setMessage("Паролі не співпадають");
     }
   }
 
   return (
     <section className="wrapperRegistration">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        rtl={false}
+        pauseOnHover={true}
+        draggable={true}
+        theme={"colored"}
+        transition={Bounce}
+        closeOnClick={true}
+      />
       <div className="registration">
         <h1>Регістрація</h1>
         <form action="registrationForm">
@@ -31,45 +43,54 @@ export function Registration(): React.JSX.Element {
               type="email"
               value={email}
               onChange={(event) => setEmail(event?.target.value)}
+              onInput={() => setMessage("")}
+              onBlur={() => {
+                if (validator.isEmail(email)) {
+                  setMessage("");
+                } else {
+                  setMessage("Перевірте правильність email");
+                }
+              }}
             />
           </label>
           <br />
-          <label htmlFor="pass">
-            Пароль
-            <br />
-            <input
-              id="pass"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event?.target.value)}
-            />
-          </label>
-          <br />
-          <div className="passEnter">
-            <div id="passOne"></div>
-            <div id="passTwo"></div>
-            <div id="passThree"></div>
-            <div id="passFour"></div>
-          </div>
+          <Password pass={password} setPass={setPassword} />
           <label htmlFor="passTwo">
             Повторіть пароль
             <br />
             <input
               id="passTwo"
               type="password"
-              value={twoPassword}
-              onChange={(event) => setTwoPassword(event?.target.value)}
+              value={confirmPassword}
+              required
+              onChange={(event) => setConfirmPassword(event?.target.value)}
+              onBlur={() => messageError()}
             />
           </label>
           <br />
+          <div style={{ color: "red" }}> {message} </div>
           <button
-            type="submit"
+            type="button"
             onClick={() => {
-              postUser(email, passValid());
+              if (password !== "" && message === "") {
+                postUser(email, password)
+                  .then(() => postLogin(email, password))
+                  .then((data) => {
+                    if (data.status == 200) {
+                      console.log(password + " " + message);
+                      localStorage.setItem("tokenStorage", data.data.token);
+                      localStorage.setItem("emailStorage", email);
+                      localStorage.setItem("refreshTokenStorage", data.data.refreshToken);
+                      document.location.href = "/";
+                    } else {
+                      toast.warn("Щось пішло не так, спробуйте увійти заново");
+                    }
+                  })
+                  .catch(() => toast.warn("Спробуйте інші дані для входу"));
+              }
             }}
           >
-            {" "}
-            Зареєструватися{" "}
+            Зареєструватися
           </button>
         </form>
         <p>

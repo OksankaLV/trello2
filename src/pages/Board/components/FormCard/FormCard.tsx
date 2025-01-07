@@ -44,14 +44,13 @@ export const FormCard = ({
   return (
     <form name="newCard" className={active ? "newList" : "noneList"}>
       <div className="formList">
-        {" "}
         <input
           id={list_id?.toString()}
           name={list_id?.toString()}
+          autoFocus={true}
           type="text"
           placeholder="Введіть назву картки"
           value={titleCard}
-          autoFocus={true}
           onChange={(event) => setTitleList(event?.target.value)}
         />
       </div>

@@ -52,7 +52,7 @@ export function List({
           setLists={setLists}
           key={el.id}
           id={el.id}
-          title={el.title + "-" + el.position}
+          title={el.title}
           view={true}
           board_id={board_id}
           list_id={id}
@@ -90,7 +90,7 @@ export function List({
             <button>Додати картку</button>
           </div>
           <div onClick={delList}>
-            <button> Видалити картку ❌ </button>
+            <button> Видалити картку </button>
           </div>
         </div>
       ) : (

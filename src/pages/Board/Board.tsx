@@ -4,7 +4,6 @@ import { List } from "./components/Lists/List";
 import { Button } from "./components/Button";
 import "./board.scss";
 import { Link, useParams } from "react-router-dom";
-import { putBoard } from "../../api/allRequests";
 import { ReplaceTitle } from "./components/ReplaceTitle/ReplaceTitle";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -13,6 +12,8 @@ import ProgressBarNew from "../ProgressBar/ProgressBarNew";
 import ICard from "../../common/interfaces/ICard";
 import { AddFormList } from "./components/AddFormList/AddFormList";
 import { setColorBoard } from "../../store/listSlice";
+import { removeItemTokenStorage } from "../../hooks/use-auth";
+import { putBoard } from "../../api/allRequests";
 
 export const Board = function (): React.JSX.Element {
   const [lists, setLists] = useState(listsStart);
@@ -81,9 +82,12 @@ export const Board = function (): React.JSX.Element {
             onChange={(event) =>
               dispatch(setColorBoard({ background: event?.target.value }))
             }
+            onBlur={() => {
+              putBoard(board_id, titleFromStore, custom);
+            }}
           />
           <Link to={`/login`}>
-            <Button name={"Вийти"} />
+            <button onClick={removeItemTokenStorage}> Вийти </button>
           </Link>{" "}
         </div>
       </nav>

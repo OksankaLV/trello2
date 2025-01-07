@@ -80,7 +80,7 @@ export const CopyMoveModal = ({
           onChange={(e) => setTitle(e.target.value)}
         />
         <p>
-          на дошку
+          на дошку{" "}
           <select
             name=""
             id=""
@@ -91,14 +91,14 @@ export const CopyMoveModal = ({
           </select>
         </p>
         <p>
-          лист
+          лист{" "}
           <select onChange={(e) => setListAction(e.target.value)}>
             <option value="">...</option>
             {OptionList}
           </select>
         </p>
         <p>
-          позиція
+          позиція{" "}
           <input
             type="number"
             value={position}
@@ -107,16 +107,14 @@ export const CopyMoveModal = ({
         </p>
 
         <button onClick={() => handleClick(typyAction)}>
-          {" "}
-          {typyAction == "Copy" ? "Копіювати" : "Перемістити"}{" "}
+          {typyAction == "Copy" ? "Копіювати" : "Перемістити"}
         </button>
         <button
           onClick={() => {
             setAction({ copy: false, move: false });
           }}
         >
-          {" "}
-          Відмінити{" "}
+          Відмінити
         </button>
       </div>
     </div>

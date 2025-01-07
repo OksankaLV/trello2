@@ -15,6 +15,10 @@
         top: 0;
         left: 0;
         text-align: center;
+
+        p{
+            max-width: none;
+        }
 }
 .registration{
 background-color: $backgroundColorModal;
@@ -33,6 +37,9 @@ background-color: $backgroundColorModal;
     button{
         margin-top: 20px;
     }
+    h1{
+        margin: 10px;
+    }
 
 }
 .passEnter{
@@ -45,6 +52,13 @@ background-color: $backgroundColorModal;
         width: 25px;
         margin: 2px 3px;
         height: 5px;
-background-color: red
+        background-color: red
     }
+}
+
+.validationMessage{
+    display: flex;
+    justify-content: center;
+
+    p {height: auto;}
 }

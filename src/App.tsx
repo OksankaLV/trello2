@@ -8,6 +8,7 @@ import { CardModalId } from "./pages/Board/components/CardModal/CardModalId";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import React from "react";
 import { ToastContainer } from "react-toastify";
+import { useAuth } from "./hooks/use-auth";
 
 function App(): React.JSX.Element {
   return (
@@ -15,7 +16,10 @@ function App(): React.JSX.Element {
       <HashRouter>
         <ToastContainer position="top-center" autoClose={5000} rtl={false} />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={useAuth().token !== undefined ? <Home /> : <Login />}
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/board/:board_id" element={<Board />} />

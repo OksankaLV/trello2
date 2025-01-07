@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { getUser, postLogin } from "../../api/allRequests";
+import { postLogin } from "../../api/allRequests";
 import "./login.scss";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,6 +10,16 @@ const Login = () => {
 
   return (
     <div className="wrapperLogin">
+      {/* <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        rtl={false}
+        pauseOnHover={true}
+        draggable={true}
+        theme={"colored"}
+        transition={Bounce}
+        closeOnClick={true}
+      /> */}
       <form action="registrationForm">
         <label htmlFor="email">
           Email
@@ -34,18 +45,38 @@ const Login = () => {
 
         <br />
         <button
-          type="submit"
+          type="button"
           onClick={() => {
-            postLogin(email, password).then((data) => console.log(data));
-          }}
+            if(password!==""){
+            postLogin(email, password)
+              .then((data) => {console.log(data)
+
+                if (data.status == 200) {
+                  localStorage.setItem("tokenStorage", data.data.token);
+                  localStorage.setItem("emailStorage", email);
+                  localStorage.setItem(
+                    "refreshTokenStorage",
+                    data.data.refreshToken
+                  );
+                  document.location.href = "/";
+                } else {
+                  console.log("result" + data);
+                  toast.warn(data.status);
+                }
+              })
+              .catch(() =>
+                toast.warn(
+                  "Комбінація логіну та паролю не дійсна, спробуйте ще раз"
+                )
+              );
+          }}}
         >
-          {" "}
-          Увійти{" "}
+          Увійти
         </button>
+        <div className="registration-link">
+          <Link to="/register">Зареєструватися</Link>
+        </div>
       </form>
-      <p>
-        <Link to="/register">Зареєструватися</Link>
-      </p>
     </div>
   );
 };

@@ -11,7 +11,7 @@ import {
 import { AppDispatch } from "./hooks";
 import { Key } from "react";
 
-const token = 123;
+const token = localStorage.getItem("tokenStorage");
 const header = { Authorization: `Bearer ${token}` };
 
 export const fetchBoard =

@@ -71,12 +71,9 @@ function onDrop(
 
   if (el && elOld?.parentElement) {
     elOld.parentElement.insertBefore(el, elOld);
-    console.log("put2");
     const newlist = el?.parentElement?.parentElement;
     if (newlist) {
-      putCards(board_id, +data, position, +newlist?.id)
-        .then(() => alert("+"))
-        .catch(() => console.log("error"));
+      putCards(board_id, +data, position, +newlist?.id);
     }
   }
 
@@ -85,15 +82,12 @@ function onDrop(
 }
 
 function getPosition(container: any, y: any) {
-  console.log(container);
   const dragEls = [
     ...container.querySelectorAll(".listItems div[draggable=true]:not(.drag)"),
   ];
 
   for (const drag of dragEls) {
     const pos = drag.getBoundingClientRect();
-    console.log(pos);
-    console.log(y + "<" + pos.bottom + " p" + pos.height / 2);
     if (y < pos.bottom + pos.height / 2) {
       return drag;
     }
