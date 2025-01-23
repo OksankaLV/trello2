@@ -1,27 +1,26 @@
 export const listsStart = [
   {
     id: 1,
-    title: "Плани",
+    title: 'Плани',
     cards: [
-      { id: 1, title: "помити кота" },
-      { id: 2, title: "приготувати суп" },
-      { id: 3, title: "сходити в магазин" },
+      { id: 1, title: 'помити кота' },
+      { id: 2, title: 'приготувати суп' },
+      { id: 3, title: 'сходити в магазин' },
     ],
-    description: "descreption",
   },
   {
     id: 2,
-    title: "В процесі",
-    cards: [{ id: 4, title: "подивитися серіал" }],
+    title: 'В процесі',
+    cards: [{ id: 4, title: 'подивитися серіал' }],
   },
   {
     id: 3,
-    title: "Зроблено",
+    title: 'Зроблено',
     cards: [
-      { id: 5, title: "зробити домашку" },
-      { id: 6, title: "погуляти з собакой" },
+      { id: 5, title: 'зробити домашку' },
+      { id: 6, title: 'погуляти з собакой' },
     ],
   },
 ];
 
-export const titleStart = "Моя тестова дошка";
+export const titleStart = 'Моя тестова дошка';

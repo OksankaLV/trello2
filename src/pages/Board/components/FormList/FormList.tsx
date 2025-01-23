@@ -1,74 +1,42 @@
-import "./formList.scss";
-import React, { useState } from "react";
-import { getBoard, postList } from "../../../../api/allRequests";
-import { validation } from "../../../../utils/validationText";
-import { toast } from "react-toastify";
+import './formList.scss';
+import React, { useState } from 'react';
+import { postList } from '../../../../utils/allRequests';
+import { validation } from '../../../../utils/validationText';
+import { toast } from 'react-toastify';
+import { error } from 'console';
 
 interface IForm {
   active: boolean;
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
   id?: string | undefined;
-  position: number;
-  setLists: React.Dispatch<React.SetStateAction<object>>;
 }
 
-function addList(
-  titleList: string,
-  id: string | undefined,
-  position: number,
-  setLists: React.Dispatch<React.SetStateAction<object>>
-) {
+function addList(titleList: string, id: string | undefined) {
   if (validation(titleList)) {
-    postList(id, titleList, position)
-      .then(() => getBoard(id))
-      .then((data) => setLists(data.lists))
-      .catch((error) => toast.warn(error));
+    postList(id, titleList, 1).then((req) => alert(`Лист з ID = ${req.id} успішно дадано`)).catch((error)=>toast.warn(error));
   } else {
-    toast.warn(
+    alert(
       "ім'я не повинно бути порожнім, у ньому можна використовувати цифри, літери (а, А), пробіли, тире, крапки, нижні підкреслення"
     );
   }
 }
 
-export const FormList = ({
-  active,
-  setActive,
-  id,
-  position,
-  setLists,
-}: IForm): JSX.Element => {
-  const [titleList, setTitleList] = useState("");
+export const FormList = ({ active, setActive, id }: IForm) : JSX.Element => {
+  const [titleList, setTitleList] = useState('');
 
   return (
-    <form className={active ? "newList" : "noneList"}>
-      <div className="formList list">
-        {" "}
-        <input
-          type="text"
-          autoFocus={true}
-          placeholder={"Введіть назву листа"}
-          value={titleList}
-          onChange={(event) => setTitleList(event?.target.value)}
-        />
-        <div>
-          <button
-            type="submit"
-            onClick={() => {
-              addList(titleList, id, position, setLists);
-              setActive(!active);
-            }}
-          >
-            Зберегти лист
-          </button>
-          <button
-            type="submit"
-            onClick={() => {
-              setActive(!active);
-            }}
-          >
-            Відмінити
-          </button>
-        </div>
+    <form className={active ? 'newList' : 'noneList'}>
+      <div className="formList">
+        {' '}
+        <input type="text" placeholder={'Введіть назву дошки'}value={titleList} onChange={(event) => setTitleList(event?.target.value)} />
+        <button
+          type="submit"
+          onClick={() => {
+            addList(titleList, id);
+          }}
+        >
+          Додати картку
+        </button>
       </div>
     </form>
   );

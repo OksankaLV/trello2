@@ -1,26 +1,17 @@
-import React, { useState } from "react";
-import { getBoard, postCard } from "../../../../api/allRequests";
-import { validation } from "../../../../utils/validationText";
-import "./formCard.scss";
-import { toast } from "react-toastify";
+import React, { useState } from 'react';
+import { getBoard, postCard } from '../../../../utils/allRequests';
+import { validation } from '../../../../utils/validationText';
+import './formCard.scss';
 
 interface IForm {
   active: boolean;
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
-  setLists: React.Dispatch<any>;
   board_id?: string | undefined;
   list_id: number | undefined;
   id?: number | undefined;
 }
 
-export const FormCard = ({
-  active,
-  setActive,
-  board_id,
-  list_id,
-  id,
-  setLists,
-}: IForm): JSX.Element => {
+export const FormCard = ({ active, setActive, board_id, list_id, id }: IForm):JSX.Element => {
   function addCard(
     titleCard: string,
     board_id: string | undefined,
@@ -29,47 +20,35 @@ export const FormCard = ({
   ) {
     if (validation(titleCard)) {
       postCard(titleCard, board_id, list_id, id)
+        .then((req) => alert(`Картку з ID = ${req.id} успішно дадано`))
         .then(() => getBoard(board_id))
-        .then((data) => setLists(data.lists))
-        .catch((error) => toast.warn(error));
+        .catch((error) => console.log(error));
+      setActive(false);
     } else {
-      toast.warn(
+      alert(
         "ім'я не повинно бути порожнім, у ньому можна використовувати цифри, літери (а, А), пробіли, тире, крапки, нижні підкреслення"
       );
     }
   }
 
-  const [titleCard, setTitleList] = useState("");
+  const [titleCard, setTitleList] = useState('');
 
   return (
-    <form name="newCard" className={active ? "newList" : "noneList"}>
+    <form name="newCard" className={active ? 'newList' : 'noneList'}>
       <div className="formList">
+        {' '}
         <input
           id={list_id?.toString()}
           name={list_id?.toString()}
-          autoFocus={true}
           type="text"
-          placeholder="Введіть назву картки"
+          placeholder='Введіть назву картки'
           value={titleCard}
+          autoFocus={true}
           onChange={(event) => setTitleList(event?.target.value)}
         />
       </div>
-      <button
-        type="submit"
-        onClick={() => {
-          addCard(titleCard, board_id, list_id, id);
-          setActive(false);
-        }}
-      >
+      <button type="submit" onClick={() => addCard(titleCard, board_id, list_id, id)}>
         Зберегти
-      </button>
-      <button
-        onClick={() => {
-          setActive(false);
-        }}
-      >
-        {" "}
-        Відмінити{" "}
       </button>
     </form>
   );
