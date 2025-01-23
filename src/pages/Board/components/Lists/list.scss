@@ -1,17 +1,11 @@
-@use '../../board.scss';
+@import '../../../../utils/constants.scss';
 
-$primaryColor: #3d2574; //#27ae60;
-$retreat: 10px;
-$radius: 15px;
-@mixin backraund($color) {
-  background: linear-gradient(150deg, $primaryColor, $color 50%);
-}
 
 .list {
   color: #04024e;
   border: 2px solid;
   border-radius: $radius;
-  border-color: $primaryColor;
+  border-color: $secondaryColor;
   text-align: center;
   margin: $retreat;
   padding-right: $retreat;
@@ -22,12 +16,27 @@ $radius: 15px;
   align-items: center;
   justify-content: space-between;
   @include backraund(#27ae6030);
-  max-height: 200px;
+  max-width: 200px;
+
+  opacity: 0;
+  animation: ani 2s forwards;
+
+  @keyframes ani {
+    0% {opacity: 0;}
+    50% {opacity: 30;}
+    100% {opacity: 100;}
+  }
+
 
   button {
-    height: 30px;
+  
     width: 80px;
     margin: 5px;
+  }
+}
+.newList {
+  button {
+    width: 75px;
   }
 }
 .titleList {
@@ -39,21 +48,48 @@ $radius: 15px;
   overflow-y: auto; //scroll - allways
   scroll-behavior: smooth;
   height: 150px;
+  width: 100%;
   div {
-    border: 1px $primaryColor solid;
+    /*border: 1px $secondaryColor solid;*/
     border-radius: $radius;
     margin: 2px;
-    padding: 5px;
+    padding: 2px;
     background-color: white;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+
+    a{
+      width: 80%;
+      text-decoration: none;
+    }
+    div{
+     // max-width: 66%;
+      white-space: pre-wrap;
+      overflow: hidden;
+    }
+
+   }
+    .newActive {
+    background-color: gray;
+    height: 4ex;    
   }
+  .noActive{
+    background-color: rgb(102, 78, 78);
+    height: 4ex;    
+
+  }
+  .drag{
+    opacity: 20%;
+    rotate: -5deg;
+  }
+
   span {
     cursor: pointer;
   }
 }
+
 
 .buttonsList {
   display: flex;

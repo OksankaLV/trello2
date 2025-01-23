@@ -1,43 +1,45 @@
-import React, { useState } from 'react';
-import { getBoard } from '../../../../utils/allRequests';
-import { validation } from '../../../../utils/validationText';
-import './replaceTitle.scss';
+import React, { useState } from "react";
+import { validation } from "../../../../utils/validationText";
+import "./replaceTitle.scss";
+import { useAppDispatch } from "../../../../store/hooks";
+import { fetchBoard } from "../../../../store/ActionCreator";
+import { putBoard } from "../../../../api/allRequests";
 
 interface ITitle {
   board_id: string | undefined;
   title: string;
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
-  //input: boolean;
-  //setInput: React.Dispatch<React.SetStateAction<boolean>>;
+  custom?: object;
   id?: number;
   position?: number;
-  nameRequest: any;
 }
-export function ReplaceTitle(props: ITitle): JSX.Element {
+export function ReplaceTitle(props: ITitle): React.JSX.Element {
   const [input, setInput] = useState(false);
+  const [titleInput, setTitleInput] = useState("");
+
+  const dispatch = useAppDispatch();
+
   const createTitle = function () {
-    if (validation(props.title)) {
-      props
-        .nameRequest(props.board_id, props.title)
-        .then(() => getBoard(props.board_id))
-        .then((data: any) => {
-          setInput(false);
-          props.setTitle(data.title);
-        });
+    if (validation(titleInput)) {
+      putBoard(props.board_id, titleInput).then(() =>
+        dispatch(fetchBoard(props.board_id))
+      );
+      setInput(false);
     } else {
-      props.setTitle(props.title);
-      setInput(true);
+      setInput(false);
     }
   };
   return (
-    <p>
+    <div>
       {input ? (
         <input
           type="text"
-          value={props.title}
-          onChange={(event) => props.setTitle(event?.target.value)}
+          autoFocus={true}
+          className="title__input"
+          value={titleInput}
+          placeholder={props.title}
+          onChange={(event) => setTitleInput(event?.target.value)}
           onKeyDown={(event) => {
-            if (event?.key === 'Enter') {
+            if (event?.key === "Enter") {
               createTitle();
             }
           }}
@@ -46,6 +48,6 @@ export function ReplaceTitle(props: ITitle): JSX.Element {
       ) : (
         <p onClick={() => setInput(!input)}> {props.title}</p>
       )}
-    </p>
+    </div>
   );
 }

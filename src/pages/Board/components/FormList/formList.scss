@@ -1,3 +1,5 @@
+@import '/src/utils/constants.scss';
+
 .formList {
   position: relative;
   display: flex;
@@ -5,13 +7,26 @@
   width: 30%;
   align-items: center;
   width: min-content;
-
-  button {
-    padding: 0px;
-    margin: 0px;
-  }
+  gap: 5px;
+  padding: 10px;
+  
+  input{
+   border: 2px solid $secondaryColor;
+   border-radius: $radius;
+    }
+button {
+  padding: 0px;
+  margin: 2px;
+}
 }
 
 .noneList {
   display: none;
+}
+
+.newList{
+  .formList > input{
+    border: 2px solid $secondaryColor;
+  }
+  
 }

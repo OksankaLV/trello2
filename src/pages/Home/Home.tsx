@@ -1,62 +1,90 @@
-import React, { useState, useEffect } from 'react';
-import { Board } from '../Home/components/Board/Board';
-import './home.scss';
-import { Link } from 'react-router-dom';
-import { getBoards } from '../../utils/allRequests';
-import { FormBoard } from './components/FormBoard/FormBoard';
-import ProgressBar from '../ProgressBar/ProgressBar';
-import { Bounce, ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/scss/main.scss';
+import React, { useState, useEffect } from "react";
+import { BoardOnHome } from "./components/BoardOnHome/BoardOnHome";
+import "./home.scss";
+import { Link } from "react-router-dom";
+import { getBoards } from "../../api/allRequests";
+import { FormBoard } from "./components/FormBoard/FormBoard";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import { useAppDispatch } from "../../store/hooks";
+import { fetchBoard } from "../../store/ActionCreator";
+import ProgressBarNew from "../ProgressBar/ProgressBarNew";
+import { removeItemTokenStorage, useAuth } from "../../hooks/use-auth";
+import Login from "../Login/Login";
 
-const boards = [
-  { id: 1, title: 'покупки', custom: { background: 'red' } },
-  { id: 2, title: 'підготовка до весілля', custom: { background: 'green' } },
-  { id: 3, title: 'розробка інтернет-магазину', custom: { background: 'blue' } },
-  { id: 4, title: 'курс по просуванню у соцмережах', custom: { background: 'grey' } },
-];
-
-export function Home() : JSX.Element {
-  const [boardData, setBoardData] = useState(boards);
+export function Home(): JSX.Element {
+  const [boardData, setBoardData] = useState([]);
   const [newBoardActive, setNewBoardActive] = useState(false);
   const [progressValue, setProgressValue] = useState(0);
-  const [error, setError] = useState('');
 
-  const list = boardData.map((el) => (
-    <Link key={el.id} to={'board/' + el.id.toString()}>
-      <Board key={el.id} title={el.title} custom={el.custom}></Board>
-    </Link>
-  ));
+  const dispatch = useAppDispatch();
+
+  const list = boardData.map(
+    (el: {
+      id: React.Key | null | undefined | string;
+      title: string;
+      custom: string;
+    }) => (
+      <Link
+        onClick={() => {
+          dispatch(fetchBoard(el.id));
+        }}
+        key={el.id}
+        to={`board/${el.id}`}
+      >
+        <BoardOnHome
+          key={el.id}
+          title={el.title}
+          custom={el.custom}
+        ></BoardOnHome>
+      </Link>
+    )
+  );
 
   useEffect(() => {
-    setProgressValue(0);
-    getBoards(setProgressValue)
-      .then((data) => {
-        setBoardData(data);
-      })
-      .catch((error) => {
-        toast.warn(error.response.data.error, {
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-        transition: Bounce,
-        closeOnClick: true,
-      });
-      });
-  },[]);
+    if (useAuth().token) {
+      getBoards(setProgressValue)
+        .then((data) => {
+          setBoardData(data);
+        })
+        .catch((error) => {
+          toast.warn(error.response.data.error);
+        });
+    }
+  }, []);
 
-  return (
+  return useAuth().token ? (
     <section className="wrapper">
-      <ToastContainer position="top-center" autoClose={5000} rtl={false} />
-      {progressValue < 100 ? <ProgressBar value={progressValue} max={100} /> : <></>}
-      <h1> Мої дошки </h1>
+      {/* {useAuth().token == undefined && <Navigate replace to="/login" />} */}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        rtl={false}
+        pauseOnHover={true}
+        draggable={true}
+        theme={"colored"}
+        transition={Bounce}
+        closeOnClick={true}
+      />
+      {progressValue < 100 ? <ProgressBarNew value={progressValue} /> : <></>}
+      <Link className="home-exit" to="/login" onClick={removeItemTokenStorage}>
+        Вийти
+      </Link>
+      <h1 className="home-title title-pacifico"> Мої дошки </h1>
       <FormBoard active={newBoardActive} setActive={setNewBoardActive} />
       <div className="boardList">
-        <div className="board" id="addBoard" onClick={() => setNewBoardActive(!newBoardActive)}>
-          Додати дошку
+        <div
+          className="board"
+          id="addBoard"
+          onClick={() => setNewBoardActive(!newBoardActive)}
+        >
+          {!newBoardActive ? "Додати дошку" : "Відмінити"}
+          <br></br>
+          {!newBoardActive ? "+" : " "}
         </div>
         {list}
       </div>
     </section>
+  ) : (
+    <Login />
   );
 }
