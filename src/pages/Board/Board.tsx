@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { listsStart } from "../../utils/data/Lists";
 import { List } from "./components/Lists/List";
-import { Button } from "./components/Button";
 import "./board.scss";
 import { Link, useParams } from "react-router-dom";
 import { ReplaceTitle } from "./components/ReplaceTitle/ReplaceTitle";
@@ -56,7 +55,7 @@ export const Board = function (): React.JSX.Element {
     <>
       <nav>
         <Link to={`/`}>
-          <Button name={"На головну сторінку"} />
+          <button> На головну сторінку </button>
         </Link>
         <div>
           <input

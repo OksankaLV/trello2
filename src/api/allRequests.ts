@@ -24,7 +24,6 @@ instance.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.log("ПОМИ req" + error);
     Promise.reject(error);
   }
 );
@@ -34,7 +33,6 @@ instance.interceptors.response.use(
     return config;
   },
   function (error) {
-    console.log("ПОМИЛКА!!!!!!!!" + error);
     if (error.response.status === 401) {
       refreshTokenFunc(error);
       error.config.headers.Authorization = `Bearer ${useAuth().token}`;
@@ -47,15 +45,12 @@ instance.interceptors.response.use(
 );
 
 const refreshTokenFunc = async (e: any) => {
-  console.log("refreshTOKEN");
   const refreshToken = useAuth().refreshToken;
   if (e.response.request.status === 401 && refreshToken) {
     try {
       const dataRefreshTokens = await postToken(refreshToken);
       setTokenToLocalStorage(dataRefreshTokens);
-      console.log("Оновлюємо токен");
     } catch (err: any) {
-      console.log("Delete token");
       removeItemTokenStorage();
       toast.error("Час сесії вийшов, зареєструйтеся будь ласка повторно");
     }

@@ -1,11 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import "./cardModal.scss";
 import React, { useEffect, useState } from "react";
-import {
-  activeCard,
-  deActiveCard,
-  setError,
-} from "../../../../store/listSlice";
+import { activeCard, deActiveCard } from "../../../../store/listSlice";
 import { deleteCard, getBoard, putCard } from "../../../../api/allRequests";
 import { validation } from "../../../../utils/validationText";
 import { fetchBoard } from "../../../../store/ActionCreator";
@@ -44,9 +40,6 @@ export const CardModalId = (): React.JSX.Element => {
       const boardData = await getBoard(board_id);
       setListData(boardData);
     };
-    // getBoard(board_id).then((data) => {
-    //   setListData(data);
-    // });
   }, []);
 
   useEffect(() => {
