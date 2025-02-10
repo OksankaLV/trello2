@@ -11,25 +11,22 @@ interface IFormList {
 
 export function AddFormList({ board_id, position, setLists }: IFormList) {
   const [newListActive, setNewListActive] = useState(false);
-  if (newListActive) {
-    return (
-      <FormList
-        active={newListActive}
-        setActive={setNewListActive}
-        id={board_id}
-        position={position}
-        setLists={setLists}
-      />
-    );
-  }
-  return (
+
+  return newListActive ? (
+    <FormList
+      active={newListActive}
+      setActive={setNewListActive}
+      id={board_id}
+      position={position}
+      setLists={setLists}
+    />
+  ) : (
     <>
       <button
         className="listButton"
         onClick={() => setNewListActive(!newListActive)}
       >
-        {" "}
-        Додати новий список{" "}
+        Додати новий список
       </button>
       <Link to="/">
         <button
@@ -38,9 +35,8 @@ export function AddFormList({ board_id, position, setLists }: IFormList) {
             setNewListActive(!newListActive);
           }}
         >
-          {" "}
-          Видалити дошку{" "}
-        </button>{" "}
+          Видалити дошку
+        </button>
       </Link>
     </>
   );

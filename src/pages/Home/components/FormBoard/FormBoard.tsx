@@ -1,8 +1,7 @@
 import "./formBoard.scss";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { postBoard } from "../../../../api/allRequests";
 import { validation } from "../../../../utils/validationText";
-import { setError } from "../../../../store/listSlice";
 import { toast } from "react-toastify";
 
 interface IForm {
@@ -10,19 +9,21 @@ interface IForm {
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function addBoard(titleBoard: string, custom: object) {
-  if (validation(titleBoard)) {
-    postBoard(titleBoard, custom).catch(() => toast.warn("Спробуйте ще раз"));
-  } else {
-    toast.warn(
-      "ім'я дошки не повинно бути порожнім, у ньому можна використовувати цифри, літери (а, А), пробіли, тире, крапки, нижні підкреслення"
-    );
-  }
-}
-
 export const FormBoard = ({ active, setActive }: IForm): JSX.Element => {
   const [titleBoard, setTitleBoard] = useState("");
   const [colorBoard, setColorBoard] = useState("#00000000");
+
+  async function addBoard() {
+    if (validation(titleBoard)) {
+      await postBoard(titleBoard, { background: colorBoard });
+      setActive(false);
+    } else {
+      toast.warn(
+        `Ім'я дошки не повинно бути порожнім, у ньому можна використовувати цифри, 
+        літери(а, А), пробіли, тире, крапки, нижні підкреслення`
+      );
+    }
+  }
 
   return (
     <form className={active ? "newBoard" : "noneBoard"}>
@@ -42,13 +43,7 @@ export const FormBoard = ({ active, setActive }: IForm): JSX.Element => {
             onChange={(event) => setColorBoard(event?.target.value)}
           />{" "}
         </span>
-        <button
-          type="button"
-          onClick={() => {
-            addBoard(titleBoard, { background: colorBoard });
-            setActive(false);
-          }}
-        >
+        <button type="button" onClick={addBoard}>
           Зберегти дошку
         </button>
       </div>

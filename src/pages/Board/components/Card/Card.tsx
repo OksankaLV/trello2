@@ -2,14 +2,8 @@ import ICard from "../../../../common/interfaces/ICard";
 import React, { useState } from "react";
 import { getBoard, putCard } from "../../../../api/allRequests";
 
-export function Card({
-  setLists,
-  id,
-  title,
-  view,
-  board_id,
-  list_id,
-}: ICard): React.JSX.Element {
+export function Card(props: ICard): React.JSX.Element {
+  const { setLists, id, title, view, board_id, list_id } = props;
   const [newTitle, setTitle] = useState(title);
   const idStr = id?.toString();
 
@@ -21,8 +15,7 @@ export function Card({
 
   return view ? (
     <div draggable="false" id={idStr}>
-      {" "}
-      {title}{" "}
+      {title}
     </div>
   ) : (
     <div id={idStr}>

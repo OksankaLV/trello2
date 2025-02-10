@@ -30,19 +30,13 @@ function addList(
   }
 }
 
-export const FormList = ({
-  active,
-  setActive,
-  id,
-  position,
-  setLists,
-}: IForm): JSX.Element => {
+export const FormList = (props: IForm): JSX.Element => {
+  const { active, setActive, id, position, setLists } = props;
   const [titleList, setTitleList] = useState("");
 
   return (
     <form className={active ? "newList" : "noneList"}>
       <div className="formList list">
-        {" "}
         <input
           type="text"
           autoFocus={true}

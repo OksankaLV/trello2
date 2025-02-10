@@ -4,12 +4,11 @@ import "./home.scss";
 import { Link } from "react-router-dom";
 import { getBoards } from "../../api/allRequests";
 import { FormBoard } from "./components/FormBoard/FormBoard";
-import { Bounce, ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useAppDispatch } from "../../store/hooks";
 import { fetchBoard } from "../../store/ActionCreator";
 import ProgressBarNew from "../ProgressBar/ProgressBarNew";
-import { removeItemTokenStorage, useAuth } from "../../hooks/use-auth";
-import Login from "../Login/Login";
+import { removeItemTokenStorage } from "../../hooks/use-auth";
 
 export function Home(): JSX.Element {
   const [boardData, setBoardData] = useState([]);
@@ -31,41 +30,28 @@ export function Home(): JSX.Element {
         key={el.id}
         to={`board/${el.id}`}
       >
-        <BoardOnHome
-          key={el.id}
-          title={el.title}
-          custom={el.custom}
-        ></BoardOnHome>
+        <BoardOnHome key={el.id} title={el.title} custom={el.custom} />
       </Link>
     )
   );
 
-  useEffect(() => {
-    if (useAuth().token) {
-      getBoards(setProgressValue)
-        .then((data) => {
-          setBoardData(data);
-        })
-        .catch((error) => {
-          toast.warn(error.response.data.error);
-        });
+  async function setBoardOnHomeList() {
+    try {
+      const board = await getBoards();
+      setBoardData(board);
+      setProgressValue(100);
+    } catch (e) {
+      toast.warn("Щось пішло не так" + e);
     }
-  }, []);
+  }
 
-  return useAuth().token ? (
+  useEffect(() => {
+    setBoardOnHomeList();
+  }, [newBoardActive]);
+
+  return (
     <section className="wrapper">
-      {/* {useAuth().token == undefined && <Navigate replace to="/login" />} */}
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        rtl={false}
-        pauseOnHover={true}
-        draggable={true}
-        theme={"colored"}
-        transition={Bounce}
-        closeOnClick={true}
-      />
-      {progressValue < 100 ? <ProgressBarNew value={progressValue} /> : <></>}
+      {progressValue < 100 ? <ProgressBarNew value={progressValue} /> : null}
       <Link className="home-exit" to="/login" onClick={removeItemTokenStorage}>
         Вийти
       </Link>
@@ -78,13 +64,11 @@ export function Home(): JSX.Element {
           onClick={() => setNewBoardActive(!newBoardActive)}
         >
           {!newBoardActive ? "Додати дошку" : "Відмінити"}
-          <br></br>
-          {!newBoardActive ? "+" : " "}
+          <br />
+          {newBoardActive && "+"}
         </div>
         {list}
       </div>
     </section>
-  ) : (
-    <Login />
   );
 }

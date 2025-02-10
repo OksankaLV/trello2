@@ -10,13 +10,16 @@ import {
 } from "./listSlice";
 import { AppDispatch } from "./hooks";
 import { Key } from "react";
+import { useAuth } from "../hooks/use-auth";
 
-const token = localStorage.getItem("tokenStorage");
-const header = { Authorization: `Bearer ${token}` };
+
+
 
 export const fetchBoard =
   (board_id: number | Key | null | undefined) =>
   async (dispatch: AppDispatch) => {
+    const header = { Authorization: `Bearer ${useAuth().token}` };
+
     try {
       dispatch(boardFetching());
       const response = await axios.get(`${api.baseURL}/board/${board_id}`, {
@@ -31,6 +34,7 @@ export const fetchBoard =
 export const getBoardWithCreateAsyncThunk = createAsyncThunk(
   "activeList/getBoardWithCreateAsyncThunk",
   async (name, { rejectWithValue }) => {
+    const header = { Authorization: `Bearer ${useAuth().token}` };
     const response = await axios.get(`${api.baseURL}/board`, {
       headers: header,
     });

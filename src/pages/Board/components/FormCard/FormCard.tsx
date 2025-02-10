@@ -13,14 +13,9 @@ interface IForm {
   id?: number | undefined;
 }
 
-export const FormCard = ({
-  active,
-  setActive,
-  board_id,
-  list_id,
-  id,
-  setLists,
-}: IForm): JSX.Element => {
+export const FormCard = (props: IForm): JSX.Element => {
+  const { active, setActive, board_id, list_id, id, setLists } = props;
+
   function addCard(
     titleCard: string,
     board_id: string | undefined,
@@ -68,8 +63,7 @@ export const FormCard = ({
           setActive(false);
         }}
       >
-        {" "}
-        Відмінити{" "}
+        Відмінити
       </button>
     </form>
   );

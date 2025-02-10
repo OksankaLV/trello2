@@ -1,93 +1,75 @@
 import axios from "axios";
 import api from "../common/constants/api";
-import { Dispatch, SetStateAction } from "react";
 import { toast } from "react-toastify";
-import { useAuth } from "../hooks/use-auth";
-
-const token = localStorage.getItem("tokenStorage");
+import {
+  removeItemTokenStorage,
+  setTokenToLocalStorage,
+  useAuth,
+} from "../hooks/use-auth";
+import { postToken } from "./reguestsUser";
 
 const instance = axios.create({
   baseURL: api.baseURL,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
   },
 });
 
 instance.interceptors.request.use(
-  function (config) {
-    
-    if (useAuth().token !== null) {
-      console.log("Токен збережений, надсилаю запит");
-    return config;
-    } else {
-      // window.location.assign(`/#login`);
-      console.log("Токен відсутній, надсилаю запит");
+  (config) => {
+    const { token } = useAuth();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  function (error) {
-    console.log("Помилка запиту");
-    return error;
+  (error) => {
+    Promise.reject(error);
   }
 );
 
 instance.interceptors.response.use(
   function (config) {
-    console.log("Відповідь успішна");
     return config;
   },
   function (error) {
-    console.log("Відповідь з помилкою");
-    if (error.response.request.status === 401) {
-      const refreshToken = useAuth().refreshToken;
-      if (refreshToken !== null) {
-        postToken(refreshToken)
-          .then((data) => {
-            console.log(data);
-            if (data.status == 200) {
-              localStorage.setItem("tokenStorage", data.data.token);
-              localStorage.setItem(
-                "refreshTokenStorage",
-                data.data.refreshToken
-              );
-            } else {
-              console.log("post token error");
-            }
-          })
-          .then(() => (document.location.href = "/"));
-      } else {
-        window.location.assign(`/login`);
-      }
-      console.log("перехоплювач 401 аксіос рес помилка");
-      toast.warn(error);
-    } else toast.warn("Виникла несподівана помилка, спроуйте ще раз");
-    console.log("перехоплювач аксіос рес помилка");
-    console.log(error);
-    return error;
+    if (error.response.status === 401) {
+      refreshTokenFunc(error);
+      error.config.headers.Authorization = `Bearer ${useAuth().token}`;
+      return instance.request(error.config);
+    } else {
+      toast.warn("Повторіть спробу");
+      return error;
+    }
   }
 );
 
-export const getBoards = async (
-  setProgressValue: Dispatch<SetStateAction<number>>
-) => {
-  const { data } = await instance.get(`${api.baseURL}/board`, {
-    
-    onDownloadProgress: () => {
-      setProgressValue(100);
-    },
-  });
+const refreshTokenFunc = async (e: any) => {
+  const refreshToken = useAuth().refreshToken;
+  if (e.response.request.status === 401 && refreshToken) {
+    try {
+      const dataRefreshTokens = await postToken(refreshToken);
+      setTokenToLocalStorage(dataRefreshTokens);
+    } catch (err: any) {
+      removeItemTokenStorage();
+      toast.error("Час сесії вийшов, зареєструйтеся будь ласка повторно");
+    }
+  } else {
+    removeItemTokenStorage();
+    location.reload();
+  }
+};
+
+export const getBoards = async () => {
+  const { data } = await instance.get(`${api.baseURL}/board`, {});
   return data.boards;
 };
 
 export const postBoard = async (value: string, custom?: object) => {
-  const { data } = await instance.post(
-    `${api.baseURL}/board`,
-    {
-      title: value,
-      custom: custom,
-    }
-  );
+  const { data } = await instance.post(`${api.baseURL}/board`, {
+    title: value,
+    custom: custom,
+  });
   return data;
 };
 
@@ -102,11 +84,10 @@ export const putBoard = async (
   title: string,
   custom?: object
 ) => {
-  const { data } = await instance.put(
-    `${api.baseURL}/board/${board_id}`,
-    { title: title, custom: custom },
-    
-  );
+  const { data } = await instance.put(`${api.baseURL}/board/${board_id}`, {
+    title: title,
+    custom: custom,
+  });
   return data;
 };
 
@@ -137,16 +118,13 @@ export const putLists = async (
   id: number,
   position: number
 ) => {
-  const { data } = await instance.put(
-    `${api.baseURL}/board/${board_id}/list`,
-    [
-      {
-        id: id,
-        title: title,
-        position: position,
-      },
-    ]
-  );
+  const { data } = await instance.put(`${api.baseURL}/board/${board_id}/list`, [
+    {
+      id: id,
+      title: title,
+      position: position,
+    },
+  ]);
   return data;
 };
 
@@ -201,10 +179,9 @@ export const putCards = async (
   position: number,
   list_id: number
 ) => {
-  const { data } = await instance.put(
-    `${api.baseURL}/board/${board_id}/card`,
-    [{ id: id, position: position, list_id: list_id }]
-  );
+  const { data } = await instance.put(`${api.baseURL}/board/${board_id}/card`, [
+    { id: id, position: position, list_id: list_id },
+  ]);
   return data;
 };
 
@@ -234,41 +211,4 @@ export const deleteCard = async (
     `${api.baseURL}/board/${board_id}/card/${id}`
   );
   return data;
-};
-
-//creating a user/regisration
-export const postUser = async (email: string, pass: string) => {
-  const data = await axios.post(`${api.baseURL}/user`, {
-    email: email,
-    password: pass,
-  });
-  return data; //201 Created {result: Created, id: 1213332}
-};
-
-//user search by username
-export const getUser = async (email: string) => {
-  const username = email.split("@")[0];
-  const data = await axios.get(`${api.baseURL}/user`, {
-    params: {
-      emailOrUsername: username,
-    },
-  });
-  return data; //200 Ok [{id:1, username: 'cwe'}, {id: 23, username: 'cwemmmm'}]
-};
-
-// authorization
-export const postLogin = async (email: string, pass: string) => {
-  const data = await axios.post(`${api.baseURL}/login`, {
-    email: email,
-    password: pass,
-  });
-  return data; //200 Ok {result: "Authorized", token: "jhgfdredfyu", refreshToken: "gfdrtyuih"}
-};
-
-// refresh token authorized
-export const postToken = async (refreshToken: string) => {
-  const data = await axios.post(`${api.baseURL}/refresh`, {
-    refreshToken: refreshToken,
-  });
-  return data; //200 Ok {result: "Authorized", token: "jhgfdredfyu", refreshToken: "gfdrtyuih"}
 };
