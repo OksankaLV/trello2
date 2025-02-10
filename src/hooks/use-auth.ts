@@ -1,21 +1,21 @@
 export function useAuth() {
-  const email = localStorage.getItem("emailStorage");
-  const token = localStorage.getItem("tokenStorage");
-  const refreshToken = localStorage.getItem("refreshTokenStorage");
-  const id = localStorage.getItem("idStorage");
+  const token = localStorage.getItem("token") || "";
+  const refreshToken = localStorage.getItem("refreshToken");
 
   return {
-    isAuth: !!email,
-    email,
     token,
     refreshToken,
-    id,
   };
 }
 
 export function removeItemTokenStorage() {
-  localStorage.removeItem("emailStorage");
-  localStorage.removeItem("tokenStorage");
-  localStorage.removeItem("refreshTokenStorage");
-  localStorage.removeItem("idStorage");
+  localStorage.removeItem("token");
+  localStorage.removeItem("refreshToken");
+}
+
+export function setTokenToLocalStorage(data: {
+  data: { token: string; refreshToken: string };
+}): void {
+  localStorage.setItem("token", data.data?.token);
+  localStorage.setItem("refreshToken", data.data?.refreshToken);
 }

@@ -14,6 +14,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Board } from "../../Board";
 import IList from "../../../../common/interfaces/IList";
 import ICard from "../../../../common/interfaces/ICard";
+import { toast } from "react-toastify";
 
 export const CardModalId = (): React.JSX.Element => {
   const { board_id, card_id } = useParams();
@@ -39,9 +40,13 @@ export const CardModalId = (): React.JSX.Element => {
   const [copyMove, setCopyMove] = useState({ copy: false, move: false });
 
   useEffect(() => {
-    getBoard(board_id).then((data) => {
-      setListData(data);
-    });
+    async () => {
+      const boardData = await getBoard(board_id);
+      setListData(boardData);
+    };
+    // getBoard(board_id).then((data) => {
+    //   setListData(data);
+    // });
   }, []);
 
   useEffect(() => {
@@ -51,19 +56,25 @@ export const CardModalId = (): React.JSX.Element => {
     }
   }, [card]);
 
-  function replaceCard() {
-    putCard(board_id, Number(card_id), titleCard, list_id, description)
-      .then(() => dispatch(fetchBoard(board_id)))
-      .then(() => navigate(-1))
-      .catch((error) => dispatch(setError(error)));
+  async function replaceCard() {
+    try {
+      await putCard(board_id, Number(card_id), titleCard, list_id, description);
+      await dispatch(fetchBoard(board_id));
+      navigate(-1);
+    } catch (e) {
+      toast.warn("Щось пішло не так, спробуйте ще раз");
+    }
   }
 
-  function delCard() {
-    deleteCard(board_id, card_id)
-      .then(() => dispatch(deActiveCard()))
-      .then(() => dispatch(fetchBoard(board_id)))
-      .then(() => navigate(-1))
-      .catch((error) => dispatch(setError(error)));
+  async function delCard() {
+    try {
+      await deleteCard(board_id, card_id);
+      dispatch(deActiveCard());
+      await dispatch(fetchBoard(board_id));
+      navigate(-1);
+    } catch (e) {
+      toast.warn("Щось пішло не так, спробуйте ще раз");
+    }
   }
 
   function copyCard() {
@@ -81,7 +92,7 @@ export const CardModalId = (): React.JSX.Element => {
         <div className="bodyModal">
           <div className="titleModal">
             <h2>
-              Картка:{" "}
+              Картка:
               <span>
                 <input
                   className="inputNone"
@@ -92,7 +103,7 @@ export const CardModalId = (): React.JSX.Element => {
                       setTitleCard(e.target.value);
                     } else {
                       () => {
-                        dispatch(setError("error in title Card"));
+                        toast.warn("error in title Card");
                       };
                     }
                   }}
@@ -101,8 +112,7 @@ export const CardModalId = (): React.JSX.Element => {
             </h2>
             <Link to={`/board/${board_id}`}>
               <button type="button" onClick={() => dispatch(deActiveCard())}>
-                {" "}
-                X{" "}
+                X
               </button>
             </Link>
           </div>
@@ -125,7 +135,7 @@ export const CardModalId = (): React.JSX.Element => {
               </div>
               <div className="description">
                 <p>
-                  Опис <button onClick={() => replaceCard()}>Змінити</button>
+                  Опис <button onClick={replaceCard}>Змінити</button>
                   <textarea
                     className="inputNone"
                     value={description}
@@ -136,9 +146,9 @@ export const CardModalId = (): React.JSX.Element => {
             </div>
             <div className="rightPart">
               <p>Дії</p>
-              <button onClick={() => copyCard()}> Копіювати </button>
-              <button onClick={() => moveCard()}> Перемістити </button>
-              <button onClick={() => delCard()}> Видалити </button>
+              <button onClick={copyCard}> Копіювати </button>
+              <button onClick={moveCard}> Перемістити </button>
+              <button onClick={delCard}> Видалити </button>
             </div>
           </div>
           {copyMove.copy && (

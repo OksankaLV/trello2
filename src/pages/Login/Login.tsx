@@ -1,26 +1,40 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { postLogin } from "../../api/allRequests";
+import { Link, useNavigate } from "react-router-dom";
+import { postLogin } from "../../api/reguestsUser";
 import "./login.scss";
 import { toast } from "react-toastify";
+import { setTokenToLocalStorage } from "../../hooks/use-auth";
+import { useAppDispatch } from "../../store/hooks";
+import { setUser } from "../../store/userSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      const data = await postLogin(email, password);
+      if (data) {
+        setTokenToLocalStorage(data);
+        dispatch(setUser({ email: email, token: data.data.token }));
+        navigate(-1);
+      }
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        toast.error("Комбінація логіну та паролю не дійсна, спробуйте ще раз");
+      } else {
+        toast.error("Виникла несподівана помилка, спробуйте ще раз");
+      }
+    }
+  };
+
   return (
     <div className="wrapperLogin">
-      {/* <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        rtl={false}
-        pauseOnHover={true}
-        draggable={true}
-        theme={"colored"}
-        transition={Bounce}
-        closeOnClick={true}
-      /> */}
-      <form action="registrationForm">
+      <form onSubmit={loginHandler}>
         <label htmlFor="email">
           Email
           <br />
@@ -28,6 +42,7 @@ const Login = () => {
             id="email"
             type="email"
             value={email}
+            required={true}
             onChange={(event) => setEmail(event?.target.value)}
           />
         </label>
@@ -39,40 +54,13 @@ const Login = () => {
             id="pass"
             type="password"
             value={password}
+            required={true}
             onChange={(event) => setPassword(event?.target.value)}
           />
         </label>
 
         <br />
-        <button
-          type="button"
-          onClick={() => {
-            if(password!==""){
-            postLogin(email, password)
-              .then((data) => {console.log(data)
-
-                if (data.status == 200) {
-                  localStorage.setItem("tokenStorage", data.data.token);
-                  localStorage.setItem("emailStorage", email);
-                  localStorage.setItem(
-                    "refreshTokenStorage",
-                    data.data.refreshToken
-                  );
-                  document.location.href = "/";
-                } else {
-                  console.log("result" + data);
-                  toast.warn(data.status);
-                }
-              })
-              .catch(() =>
-                toast.warn(
-                  "Комбінація логіну та паролю не дійсна, спробуйте ще раз"
-                )
-              );
-          }}}
-        >
-          Увійти
-        </button>
+        <button>Увійти</button>
         <div className="registration-link">
           <Link to="/register">Зареєструватися</Link>
         </div>
