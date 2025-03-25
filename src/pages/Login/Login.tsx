@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { postLogin } from "../../api/reguestsUser";
 import "./login.scss";
 import { toast } from "react-toastify";
-import { setTokenToLocalStorage } from "../../hooks/use-auth";
+import { setTokenToLocalStorage, useAuth } from "../../hooks/use-auth";
 import { useAppDispatch } from "../../store/hooks";
 import { setUser } from "../../store/userSlice";
 
@@ -13,15 +13,16 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  
   const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
       const data = await postLogin(email, password);
-      if (data) {
+      if (data.status===200) {
         setTokenToLocalStorage(data);
         dispatch(setUser({ email: email, token: data.data.token }));
-        navigate(-1);
+        navigate(-1)
+          
       }
     } catch (err: any) {
       if (err.response?.status === 401) {
