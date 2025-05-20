@@ -16,14 +16,9 @@ interface IModal {
   description: string | undefined;
 }
 
-export const CopyMoveModal = ({
-  titleCard,
-  setAction,
-  typyAction,
-  description,
-}: IModal): JSX.Element => {
+export const CopyMoveModal = (props: IModal): JSX.Element => {
+  const { titleCard, setAction, typyAction, description } = props;
   const dispatch = useAppDispatch();
-
   const board = useAppSelector((state) => state.boards.data);
   const status = useAppSelector((state) => state.boards.status);
   const [title, setTitle] = useState(titleCard);
@@ -98,7 +93,7 @@ export const CopyMoveModal = ({
           </select>
         </p>
         <p>
-          позиція{" "}
+          позиція
           <input
             type="number"
             value={position}

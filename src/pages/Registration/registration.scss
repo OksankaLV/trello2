@@ -60,5 +60,8 @@ background-color: $backgroundColorModal;
     display: flex;
     justify-content: center;
 
-    p {height: auto;}
+    p {height: auto;
+    font-size: small;
+color: red;}
+
 }

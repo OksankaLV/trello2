@@ -12,17 +12,18 @@ interface ITitleList {
 }
 
 export function ReplaceTitleList(props: ITitleList): JSX.Element {
-  const [input, setInput] = useState(false);
-  const [title, setTitle] = useState(props.titleList);
 
-  const createTitle = function () {
+  const { titleList, board_id, list_id, position, setLists } = props;
+
+  const [input, setInput] = useState(false);
+  const [title, setTitle] = useState(titleList);
+
+  const createTitle = async function () {
     if (validation(title)) {
-      putList(props.board_id, title, props.list_id, props.position)
-        .then(() => getBoard(props.board_id))
-        .then((data) => props.setLists(data.lists))
-        .then((data: any) => {
-          setInput(false);
-        });
+      await putList(board_id, title, list_id, position)
+      const boardData = await getBoard(board_id)
+      setLists(boardData.lists)
+      setInput(false);
     } else {
       setInput(true);
     }
@@ -40,7 +41,7 @@ export function ReplaceTitleList(props: ITitleList): JSX.Element {
               createTitle();
             }
           }}
-          onBlur={() => createTitle()}
+          onBlur={createTitle}
         ></input>
       ) : (
         <p onClick={() => setInput(!input)}> {title}</p>

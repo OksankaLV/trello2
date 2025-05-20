@@ -16,12 +16,14 @@ export function ReplaceTitle(props: ITitle): React.JSX.Element {
   const [input, setInput] = useState(false);
   const [titleInput, setTitleInput] = useState("");
 
+  const {board_id, title} = props;
+
   const dispatch = useAppDispatch();
 
-  const createTitle = function () {
+  const createTitle = async function () {
     if (validation(titleInput)) {
-      putBoard(props.board_id, titleInput).then(() =>
-        dispatch(fetchBoard(props.board_id))
+      await putBoard(board_id, titleInput)
+      dispatch(fetchBoard(board_id)
       );
       setInput(false);
     } else {
@@ -36,17 +38,17 @@ export function ReplaceTitle(props: ITitle): React.JSX.Element {
           autoFocus={true}
           className="title__input"
           value={titleInput}
-          placeholder={props.title}
+          placeholder={title}
           onChange={(event) => setTitleInput(event?.target.value)}
           onKeyDown={(event) => {
             if (event?.key === "Enter") {
               createTitle();
             }
           }}
-          onBlur={() => createTitle()}
+          onBlur={createTitle}
         ></input>
       ) : (
-        <p onClick={() => setInput(!input)}> {props.title}</p>
+        <p onClick={() => setInput(!input)}> {title}</p>
       )}
     </div>
   );

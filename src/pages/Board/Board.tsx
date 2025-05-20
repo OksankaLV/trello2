@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { listsStart } from "../../utils/data/Lists";
 import { List } from "./components/Lists/List";
-import { Button } from "./components/Button";
 import "./board.scss";
 import { Link, useParams } from "react-router-dom";
 import { ReplaceTitle } from "./components/ReplaceTitle/ReplaceTitle";
-import { toast, Bounce, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchBoard } from "../../store/ActionCreator";
 import ProgressBarNew from "../ProgressBar/ProgressBarNew";
@@ -37,19 +36,6 @@ export const Board = function (): React.JSX.Element {
       .catch(() => toast.warn(error));
   }, [activeModalCard, lists]);
 
-  useEffect(() => {
-    if (error) {
-      toast.warn(error, {
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        transition: Bounce,
-        closeOnClick: true,
-      });
-    }
-  }, [error]);
-
   document.title = titleFromStore;
 
   const listItems = listsFromStore.map(
@@ -68,10 +54,9 @@ export const Board = function (): React.JSX.Element {
   return (
     <>
       <nav>
-        {" "}
         <Link to={`/`}>
-          <Button name={"На головну сторінку"} />
-        </Link>{" "}
+          <button> На головну сторінку </button>
+        </Link>
         <div>
           <input
             style={custom}
@@ -88,12 +73,11 @@ export const Board = function (): React.JSX.Element {
           />
           <Link to={`/login`}>
             <button onClick={removeItemTokenStorage}> Вийти </button>
-          </Link>{" "}
+          </Link>
         </div>
       </nav>
       <div className="wrapper" style={custom}>
-        <ToastContainer />
-        {progressValue < 100 ? <ProgressBarNew value={progressValue} /> : <></>}
+        {progressValue < 100 ? <ProgressBarNew value={progressValue} /> : null}
         <div className="header">
           <div className="title title-pacifico">
             <ReplaceTitle board_id={board_id} title={titleFromStore} />
